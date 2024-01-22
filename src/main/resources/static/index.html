@@ -1,0 +1,211 @@
+
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My schedule</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
+
+        * {
+            font-family: 'Gowun Dodum', sans-serif;
+        }
+
+        .mytitle {
+            height: 250px;
+            color: white;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            background-color: cornflowerblue;
+        }
+
+        .mytitle>button {
+            width: 150px;
+            height: 50px;
+            background-color: transparent;
+            color: white;
+            border: 1px solid white;
+            border-radius: 5px;
+
+            margin-top: 20px;
+        }
+
+        .mycards {
+            width: 538px;
+            border-radius: 5px;
+            background-color: #ffffff;
+            margin-bottom: 12px;
+        }
+        .mypostingbox {
+            width: 500px;
+            margin: 30px auto 0px auto;
+            padding: 20px;
+            box-shadow: 0px 0px 3px 0px blue;
+            border-radius: 5px;
+        }
+
+        .mybtn {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mybtn>button {
+            margin-right: 5px;
+        }
+        #card-box {
+            margin-top: 12px;
+            text-align: center;
+        }
+        .mycards {
+            width: 538px;
+            border-radius: 5px;
+            background-color: aliceblue;
+            margin-bottom: 12px;
+            margin: 30px auto 0px auto;
+        }
+
+        .contents div.edit {
+            display: none;
+        }
+    </style>
+<script>
+    function isValidContents(contents) {
+        if (contents == '') {
+            alert('내용을 입력해주세요');
+            return false;
+        }
+        return true;
+    }
+
+    function addHTML(id, title, admin, pw, contents, createdAt) {
+        // 1. HTML 태그를 만듭니다.
+        let tempHtml = `<div class="mycards">
+                <!-- date/username 영역 -->
+                <div class="metadata">
+                    <div class="date">
+                        ${createdAt}
+                    </div>
+                    <div id="${id}-username" class="username">
+                        <h2>${title}<h2>
+                    </div>
+
+
+                </div>
+
+                <!-- 버튼 영역-->
+                <div class="footer">
+                    <button type="button" class="btn btn-outline-primary"  onclick="location.href='detail.html'"
+                    th:onclick="|location.href='@{/schedules/{id}'|">더보기</button>
+                </div>
+            </div>`;
+        // 2. #cards-box 에 HTML을 붙인다.
+        $('#card-box').append(tempHtml);
+    }
+
+
+    function writePost() {
+        // 1. 작성한 메모를 불러옵니다.
+        let title = $('#title').val();
+        let admin = $('#admin').val();
+        let password = $('#pw').val();
+        let contents = $('#detail').val();
+
+        // 2. 작성한 메모가 올바른지 isValidContents 함수를 통해 확인합니다.
+        if (isValidContents(contents) == false) {
+            return;
+        }
+
+        // 4. 전달할 data JSON으로 만듭니다.
+        let data = {'title': title, 'admin': admin, 'password': password, 'contents': contents};
+
+        // 5. POST /api/memos 에 data를 전달합니다.
+        $.ajax({
+            type: "POST",
+            url: "/api/schedules",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function (response) {
+                alert('메시지가 성공적으로 작성되었습니다.');
+                window.location.reload();
+            }
+        });
+    }
+
+
+    function getSchedules() {
+        // 1. 기존 메모 내용을 지웁니다.
+        console.log("조회1")
+        $('#cards-box').empty();
+        // 2. 메모 목록을 불러와서 HTML로 붙입니다.
+        $.ajax({
+            type: 'GET',
+            url: '/api/schedules/all',
+            success: function (response) {
+                for (let i = 0; i < response.length; i++) {
+                    let message = response[i];
+                    let id = message['id'];
+                    let title = message['title'];
+                    let admin = message['admin'];
+                    let pw = message['password'];
+                    let contents = message['contents'];
+                    let createdAt = message['createdAt'];
+                    addHTML(id, title, admin, pw, contents, createdAt);
+                }
+            }
+        })
+    }
+
+
+
+
+
+</script>
+</head>
+
+<body>
+<div class="mytitle">
+    <h1>스케쥴 관리</h1>
+
+    <button type="button" class="btn btn-primary" onclick="getSchedules()">전체 스케쥴 조회</button>
+
+</div>
+<div class="mypostingbox" id="postingbox">
+    <div class="form-floating mb-3">
+        <input type="email" class="form-control" id="title" placeholder="스케쥴 제목">
+        <label for="floatingInput">스케쥴 제목</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="email" class="form-control" id="admin" placeholder="관리자">
+        <label for="floatingInput">관리자</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="email" class="form-control" id="pw" placeholder="비밀번호">
+        <label for="floatingInput">비밀번호</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="email" class="form-control" id="detail" placeholder="스케쥴 내용">
+        <label for="floatingInput">스케쥴 내용</label>
+    </div>
+    <div class="mybtn">
+        <button id="postingbtn" type="button" class="btn btn-primary" onclick="writePost()">기록하기</button>
+    </div>
+</div>
+<div id="card-box">
+
+
+</div>
+</body>
+
+</html>
