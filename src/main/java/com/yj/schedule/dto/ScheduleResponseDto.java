@@ -16,6 +16,7 @@ public class ScheduleResponseDto {
     private String admin;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+    private String server_message;
 
     public ScheduleResponseDto(Schedule schedule){
         this.id = schedule.getId();
@@ -25,4 +26,8 @@ public class ScheduleResponseDto {
         this.modifiedAt = schedule.getModifiedAt();
         this.createdAt = schedule.getCreatedAt();
     }
+    public ScheduleResponseDto(String message){
+        this.server_message = message;
+    }
+
 }

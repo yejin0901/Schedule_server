@@ -21,11 +21,8 @@ public class ScheduleService {
 
     public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto) {
         Schedule schedule = new Schedule(requestDto);
-
         Schedule saveSchedule = scheduleRepository.save(schedule);
-
         ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(saveSchedule);
-
         return scheduleResponseDto;
 
     }
@@ -40,11 +37,17 @@ public class ScheduleService {
     }
 
 
-    public Long deleteSchedule(Long id, String password) {
+    public ScheduleResponseDto deleteSchedule(Long id, String password) {
         Schedule schedule = findSchedule(id);
-        checkPassword(schedule, password);
+        try {
+            checkPassword(schedule, password);
+        } catch (Exception e) {
+            return new ScheduleResponseDto("HTTP status code : " + HttpStatus.NOT_FOUND.value());
+        }
         scheduleRepository.delete(schedule);
-        return id;
+        ScheduleResponseDto responseDto = new ScheduleResponseDto("삭제성공");
+
+        return responseDto;
     }
 
     private Schedule findSchedule(Long id) {
@@ -55,14 +58,19 @@ public class ScheduleService {
     @Transactional
     public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto) {
         Schedule schedule = findSchedule(id);
-        checkPassword(schedule, requestDto.getPassword());
+        try {
+            checkPassword(schedule, requestDto.getPassword());
+        } catch (Exception e) {
+            return new ScheduleResponseDto("HTTP status code : " + HttpStatus.NOT_FOUND.value());
+        }
         schedule.update(requestDto);
         return new ScheduleResponseDto(schedule);
     }
 
+
     public void checkPassword(Schedule schedule, String password) {
         if (!schedule.getPassword().equals(password)) {
-            throw new IncorrectPasswordException("비밀번호가 틀립니다. http status code : " + HttpStatus.BAD_REQUEST.value());
+            throw new IncorrectPasswordException("비밀번호 불일치");
         }
     }
 
