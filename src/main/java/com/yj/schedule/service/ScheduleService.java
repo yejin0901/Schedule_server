@@ -45,7 +45,7 @@ public class ScheduleService {
             return new ScheduleResponseDto("HTTP status code > " + HttpStatus.NOT_FOUND.value());
         }
         scheduleRepository.delete(schedule);
-        ScheduleResponseDto responseDto = new ScheduleResponseDto("삭제성공");
+        ScheduleResponseDto responseDto = new ScheduleResponseDto("삭제 성공");
 
         return responseDto;
     }
