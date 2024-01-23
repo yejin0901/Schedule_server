@@ -42,7 +42,7 @@ public class ScheduleService {
         try {
             checkPassword(schedule, password);
         } catch (Exception e) {
-            return new ScheduleResponseDto("HTTP status code : " + HttpStatus.NOT_FOUND.value());
+            return new ScheduleResponseDto("HTTP status code > " + HttpStatus.NOT_FOUND.value());
         }
         scheduleRepository.delete(schedule);
         ScheduleResponseDto responseDto = new ScheduleResponseDto("삭제성공");
@@ -61,7 +61,7 @@ public class ScheduleService {
         try {
             checkPassword(schedule, requestDto.getPassword());
         } catch (Exception e) {
-            return new ScheduleResponseDto("HTTP status code : " + HttpStatus.NOT_FOUND.value());
+            return new ScheduleResponseDto("HTTP status code > " + HttpStatus.NOT_FOUND.value());
         }
         schedule.update(requestDto);
         return new ScheduleResponseDto(schedule);
