@@ -1,13 +1,13 @@
 package com.yj.schedule.entity;
 
 import com.yj.schedule.dto.ScheduleRequestDto;
-import com.yj.schedule.dto.ScheduleResponseDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -20,28 +20,28 @@ public class Schedule extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title", nullable = false)
+    @Column(nullable = false)
     private String title;
-    @Column(name = "admin", nullable = false)
-    private String admin;
-    @Column(name = "password", nullable = false)
-    private String password;
-    @Column(name = "contents", nullable = false, length = 500)
+    @Column(nullable = false, length = 500)
     private String contents;
+    @Column(nullable = false)
+    private String done;
 
-    public Schedule(ScheduleRequestDto requestDto){
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @OneToMany(mappedBy = "schedule")
+    private List<Comment> commentList = new ArrayList<>();
+
+
+
+    public Schedule(ScheduleRequestDto requestDto, User user){
         this.title = requestDto.getTitle();
-        this.admin = requestDto.getAdmin();
-        this.password = requestDto.getPassword();
+        this.user = user;
         this.contents = requestDto.getContents();
+        this.done = "FALSE";
 
-    }
-
-    public void update(ScheduleRequestDto requestDto){
-        this.title = requestDto.getTitle();
-        this.admin = requestDto.getAdmin();
-        this.password = requestDto.getPassword();
-        this.contents = requestDto.getContents();
     }
 
 

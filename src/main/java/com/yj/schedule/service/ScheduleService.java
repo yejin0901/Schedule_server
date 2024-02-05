@@ -1,83 +1,79 @@
 package com.yj.schedule.service;
 
+
 import com.yj.schedule.dto.ScheduleRequestDto;
 import com.yj.schedule.dto.ScheduleResponseDto;
 import com.yj.schedule.entity.Schedule;
+import com.yj.schedule.entity.User;
+import com.yj.schedule.jwt.JwtUtil;
 import com.yj.schedule.repository.ScheduleRepository;
-import org.springframework.http.HttpStatus;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class ScheduleService {
+
     private final ScheduleRepository scheduleRepository;
+    private final JwtUtil jwtUtil;
 
-    public ScheduleService(ScheduleRepository scheduleRepository) {
-        this.scheduleRepository = scheduleRepository;
-    }
-
-    public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto) {
-        Schedule schedule = new Schedule(requestDto);
-        Schedule saveSchedule = scheduleRepository.save(schedule);
-        ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(saveSchedule);
-        return scheduleResponseDto;
-
-    }
-
-    public List<ScheduleResponseDto> getSchedules() {
-        return scheduleRepository.findAllByOrderByCreatedAtDesc().stream().map(ScheduleResponseDto::new).toList();
-    }
-
-    public ScheduleResponseDto getDetailSchedule(Long id) {
-        Schedule schedule = findSchedule(id);
+    public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto, User user, HttpServletRequest request) {
+        String token = jwtUtil.getJwtFromHeader(request);
+        jwtUtil.validateToken(token);
+        Schedule schedule = scheduleRepository.save(new Schedule(requestDto, user));
         return new ScheduleResponseDto(schedule);
+
+
     }
 
-
-    public ScheduleResponseDto deleteSchedule(Long id, String password) {
+    public ScheduleResponseDto getSchedule(Long id, User user) {
         Schedule schedule = findSchedule(id);
-        try {
-            checkPassword(schedule, password);
-        } catch (Exception e) {
-            return new ScheduleResponseDto("HTTP status code > " + HttpStatus.NOT_FOUND.value());
+        if(!schedule.getUser().equals(user.getUsername())){
+            new ScheduleResponseDto("fail-validate-user");
         }
-        scheduleRepository.delete(schedule);
-        ScheduleResponseDto responseDto = new ScheduleResponseDto("삭제 성공");
+        return new ScheduleResponseDto(schedule);
 
-        return responseDto;
+
     }
 
     private Schedule findSchedule(Long id) {
-        return scheduleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("선택한 메모는 존재하지 않습니다."));
+        return scheduleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 할일이 존재하지 않습니다."));
     }
 
+    public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto, User user, HttpServletRequest request) {
+        String token = jwtUtil.getJwtFromHeader(request);
+        jwtUtil.validateToken(token);
 
-    @Transactional
-    public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto) {
         Schedule schedule = findSchedule(id);
-        try {
-            checkPassword(schedule, requestDto.getPassword());
-        } catch (Exception e) {
-            return new ScheduleResponseDto("HTTP status code > " + HttpStatus.NOT_FOUND.value());
+
+        if(!checkSelfUser(user,schedule)){
+            return new ScheduleResponseDto(("fail-validate-user"));
         }
-        schedule.update(requestDto);
+        if (requestDto.getDone().equals("TRUE")) {
+            schedule.setDone("TRUE");
+        }
+        schedule.setTitle(requestDto.getTitle());
+        schedule.setContents(requestDto.getContents());
+        schedule = scheduleRepository.save(schedule);
+
         return new ScheduleResponseDto(schedule);
+
+
     }
 
 
-    public void checkPassword(Schedule schedule, String password) {
-        if (!schedule.getPassword().equals(password)) {
-            throw new IncorrectPasswordException("비밀번호 불일치");
-        }
+    public List<ScheduleResponseDto> getAllSchedule() {
+        return scheduleRepository.findAllByDoneEqualsOrderByCreatedAtDesc("FALSE").stream().map(ScheduleResponseDto::new).toList();
     }
 
-    public class IncorrectPasswordException extends IllegalArgumentException {
-        public IncorrectPasswordException(String message) {
-            super(message);
-        }
+    private Boolean checkSelfUser(User user, Schedule schedule) {
+        return user.getId().equals(schedule.getId());
+
     }
 
 

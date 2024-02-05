@@ -1,33 +1,42 @@
 package com.yj.schedule.dto;
-
-
-import lombok.Getter;
-import com.yj.schedule.entity.Schedule;
-import org.springframework.http.HttpStatus;
-
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.yj.schedule.entity.Comment;
+import com.yj.schedule.entity.Schedule;
+import com.yj.schedule.entity.User;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
-public class ScheduleResponseDto {
-    private Long id;
-    private String contents;
+@Setter
+@NoArgsConstructor
+public class ScheduleResponseDto{
     private String title;
-    private String admin;
+    private String contents;
+    private String username;
+    private String done;
+    private String success;
     private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
-    private String server_message;
+    private List<CommentResponseDto> commentList = new ArrayList<>();
 
-    public ScheduleResponseDto(Schedule schedule){
-        this.id = schedule.getId();
-        this.contents = schedule.getContents();
+    public ScheduleResponseDto(Schedule schedule) {
+
         this.title = schedule.getTitle();
-        this.admin = schedule.getAdmin();
-        this.modifiedAt = schedule.getModifiedAt();
+        this.contents = schedule.getContents();
+        this.username = schedule.getUser().getUsername();
+        this.done = schedule.getDone();
         this.createdAt = schedule.getCreatedAt();
+        for (Comment comment: schedule.getCommentList()){
+            commentList.add(new CommentResponseDto(comment));
+        }
+        this.success = "success";
     }
-    public ScheduleResponseDto(String message){
-        this.server_message = message;
+
+    public ScheduleResponseDto(String success){
+        this.success = success;
     }
 
 }
