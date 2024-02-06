@@ -4,5 +4,4 @@
 
 
 ![usecase](https://github.com/yejin0901/Schedule_server/assets/61917664/33b44fa7-1716-4564-813c-1afecd5504d7)
-
 <img src = "https://github.com/yejin0901/Schedule_server/assets/61917664/e7984872-2cc9-4c19-a991-3f4920a4ce11.png" width="500" height="700"/>
