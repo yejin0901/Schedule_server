@@ -23,7 +23,6 @@ public class ScheduleResponseDto{
     private List<CommentResponseDto> commentList = new ArrayList<>();
 
     public ScheduleResponseDto(Schedule schedule) {
-
         this.title = schedule.getTitle();
         this.contents = schedule.getContents();
         this.username = schedule.getUser().getUsername();
@@ -35,8 +34,9 @@ public class ScheduleResponseDto{
         this.success = "success";
     }
 
-    public ScheduleResponseDto(String success){
-        this.success = success;
+    public ScheduleResponseDto(String message)
+    {
+        this.success = message;
     }
 
 }

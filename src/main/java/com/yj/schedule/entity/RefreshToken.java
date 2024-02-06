@@ -24,4 +24,10 @@ public class RefreshToken {
         this.memberId = memberId;
         this.token = token;
     }
+
+    public void validateSameToken(String refreshToken) {
+        if (!this.token.equals(refreshToken)) {
+            throw new IllegalArgumentException();
+        }
+    }
 }

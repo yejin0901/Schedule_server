@@ -27,7 +27,7 @@ public class JwtUtil {
     // Token 식별자users
     public static final String BEARER_PREFIX = "Bearer ";
     // 토큰 만료시간users
-    private final long TOKEN_TIME = 2 * 60 * 60 * 1000L; // 60분
+    private final long TOKEN_TIME = 60 * 60 * 1000L;
 
     @Value("${jwt.secret.key}") // Base64 Encode 한 SecretKey
     private String secretKey;
@@ -41,14 +41,14 @@ public class JwtUtil {
     }
 
     // 토큰 생성
-    public String createToken(String username, UserRoleEnum role) {
+    public String createAccessToken(String username, UserRoleEnum role) {
         Date date = new Date();
 
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(username) // 사용자 식별자값(ID)
                         .claim(AUTHORIZATION_KEY, role) // 사용자 권한
-//                        .setExpiration(new Date(date.getTime() + ACCESS_TOKEN_EXPIRATION_TIME)) // 만료 시간
+                        .setExpiration(new Date(date.getTime() + TOKEN_TIME)) // 만료 시간
                         .setIssuedAt(date) // 발급일
                         .signWith(key, signatureAlgorithm) // 암호화 알고리즘
                         .compact();
@@ -59,7 +59,7 @@ public class JwtUtil {
 
         return Jwts.builder()
                 .setSubject(username) // 사용자 식별자값(ID)
-//                .setExpiration(new Date(date.getTime() + REFRESH_TOKEN_EXPIRATION_TIME)) // RefreshToken 만료 시간
+                .setExpiration(new Date(date.getTime() + TOKEN_TIME)) // RefreshToken 만료 시간
                 .setIssuedAt(date) // 발급일
                 .signWith(key, signatureAlgorithm) // 암호화 알고리즘
                 .compact();
@@ -102,8 +102,15 @@ public class JwtUtil {
                         .build());
     }
 
-    // 토큰에서 사용자 정보 가져오기
     public Claims getUserInfoFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+    }
+
+    public static String extractRefreshToken(HttpServletRequest request) {
+        String authorizationHeader = request.getHeader(AUTHORIZATION_HEADER);
+        if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
+            return authorizationHeader.substring(7); // "Bearer " 다음에 오는 토큰 반환
+        }
+        throw new IllegalArgumentException("Invalid RefreshToken");
     }
 }

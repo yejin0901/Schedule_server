@@ -24,10 +24,9 @@ public class Comment {
     @Column(nullable = false, length = 200)
     private String creator;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
-
 
     public Comment(CommentRequestDto requestDto, Schedule schedule, User user){
         this.schedule = schedule;

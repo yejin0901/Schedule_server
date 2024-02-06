@@ -27,14 +27,12 @@ public class Schedule extends Timestamped {
     @Column(nullable = false)
     private String done;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "schedule")
     private List<Comment> commentList = new ArrayList<>();
-
-
 
     public Schedule(ScheduleRequestDto requestDto, User user){
         this.title = requestDto.getTitle();

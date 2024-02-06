@@ -29,22 +29,23 @@ public class ScheduleController {
     public ResponseEntity<CommonResponse<ScheduleResponseDto>> createSchedule(
             @RequestBody ScheduleRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            HttpServletRequest request){
-        ScheduleResponseDto response = scheduleService.createSchedule(requestDto,userDetails.getUser(), request);
-        else {
-            return ResponseEntity.ok()
-                    .body(CommonResponse.<ScheduleResponseDto>builder()
-                            .statusCode(HttpStatus.OK.value())
-                            .msg("일정이 생성되었습니다.")
-                            .data(response)
-                            .build());
-        }
+            HttpServletRequest request) {
+        ScheduleResponseDto response = scheduleService.createSchedule(requestDto, userDetails.getUser(), request);
+        return ResponseEntity.ok()
+                .body(CommonResponse.<ScheduleResponseDto>builder()
+                        .statusCode(HttpStatus.OK.value())
+                        .msg("일정이 생성되었습니다.")
+                        .data(response)
+                        .build());
+
     }
 
     @GetMapping("/schedules/{id}")
     public  ResponseEntity<CommonResponse<ScheduleResponseDto>> getSelectSchedule(@PathVariable Long id,@AuthenticationPrincipal UserDetailsImpl userDetails){
         ScheduleResponseDto response = scheduleService.getSchedule(id, userDetails.getUser());
+        log.info(response.getSuccess());
         if(response.getSuccess().equals("fail-validate-user")){
+            log.info("controller");
             return ResponseEntity.badRequest()
                     .body(CommonResponse.<ScheduleResponseDto>builder()
                             .statusCode(HttpStatus.BAD_REQUEST.value())

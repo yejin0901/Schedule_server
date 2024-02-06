@@ -4,6 +4,7 @@ import com.yj.schedule.jwt.JwtUtil;
 import com.yj.schedule.security.JwtAuthenticationFilter;
 import com.yj.schedule.security.JwtAuthorizationFilter;
 import com.yj.schedule.security.UserDetailsServiceImpl;
+import com.yj.schedule.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +26,7 @@ public class WebSecurityConfig {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
+    private final RefreshTokenService refreshTokenService;
     private final AuthenticationConfiguration authenticationConfiguration;
 
     @Bean
@@ -39,7 +41,7 @@ public class WebSecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil);
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil, refreshTokenService);
         filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
         return filter;
     }
@@ -55,22 +57,15 @@ public class WebSecurityConfig {
         http.csrf((csrf) -> csrf.disable());
 
         // 기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
-        http.sessionManagement((sessionManagement) ->
-                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        http.sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
+                .requestMatchers("/").permitAll() // 메인 페이지 요청 허가
+                .requestMatchers("/api/user/**").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
+                .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
 
-        http.authorizeHttpRequests((authorizeHttpRequests) ->
-                authorizeHttpRequests
-                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
-                        .requestMatchers("/").permitAll() // 메인 페이지 요청 허가
-                        .requestMatchers("/api/user/**").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
-                        .anyRequest().authenticated() // 그 외 모든 요청 인증처리
-        );
-
-        http.formLogin((formLogin) ->
-                formLogin
-                        .loginPage("/api/user/login").permitAll()
-        );
+        http.formLogin((formLogin) -> formLogin.loginPage("/api/user/login").permitAll());
 
         // 필터 관리
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);

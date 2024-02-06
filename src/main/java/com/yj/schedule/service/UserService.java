@@ -22,7 +22,6 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
     public Boolean signup(SignupRequestDto requestDto) {
@@ -34,18 +33,11 @@ public class UserService {
         if (checkUsername.isPresent()) {
             return false;
         }
-
-
         // 사용자 ROLE 확인
         UserRoleEnum role = UserRoleEnum.USER;
-
-
         // 사용자 등록
         User user = new User(username, password, role);
         userRepository.save(user);
-
         return true;
     }
-
-
 }

@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,21 +31,21 @@ public class ScheduleService {
 
 
     }
-
+    @Transactional
     public ScheduleResponseDto getSchedule(Long id, User user) {
         Schedule schedule = findSchedule(id);
-        if(!schedule.getUser().equals(user.getUsername())){
-            new ScheduleResponseDto("fail-validate-user");
+        if(!checkSelfUser(user,schedule)){
+            log.info("ok");
+            return new ScheduleResponseDto("fail-validate-user");
         }
+
         return new ScheduleResponseDto(schedule);
-
-
     }
-
+    @Transactional
     private Schedule findSchedule(Long id) {
         return scheduleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 할일이 존재하지 않습니다."));
     }
-
+    @Transactional
     public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto, User user, HttpServletRequest request) {
         String token = jwtUtil.getJwtFromHeader(request);
         jwtUtil.validateToken(token);
@@ -62,18 +63,13 @@ public class ScheduleService {
         schedule = scheduleRepository.save(schedule);
 
         return new ScheduleResponseDto(schedule);
-
-
     }
-
-
     public List<ScheduleResponseDto> getAllSchedule() {
         return scheduleRepository.findAllByDoneEqualsOrderByCreatedAtDesc("FALSE").stream().map(ScheduleResponseDto::new).toList();
     }
-
     private Boolean checkSelfUser(User user, Schedule schedule) {
-        return user.getId().equals(schedule.getId());
-
+        log.info(schedule.getUser().getUsername());
+        return user.getUsername().equals(schedule.getUser().getUsername());
     }
 
 

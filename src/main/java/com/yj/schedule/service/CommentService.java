@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.logging.Logger;
 @Slf4j
@@ -29,7 +30,7 @@ public class CommentService {
         String token = jwtUtil.getJwtFromHeader(request);
         jwtUtil.validateToken(token);
         Schedule schedule = findSchedule(scheduleId);
-        if(commentRepository.findById(scheduleId).isPresent()) {
+        if(scheduleRepository.findById(scheduleId).isPresent()) {
             Comment comment = commentRepository.save(new Comment(requestDto, schedule, user));
             commentRepository.save(comment);
             return new ScheduleResponseDto(schedule);
@@ -37,11 +38,8 @@ public class CommentService {
         else{
             throw new IllegalArgumentException("해당일정이 없습니다.");
         }
-
-
-
     }
-
+    @Transactional
     public ScheduleResponseDto updateComment(CommentRequestDto requestDto,Long scheduleId, Long commentId, User user, HttpServletRequest request) {
         String token = jwtUtil.getJwtFromHeader(request);
         jwtUtil.validateToken(token);
@@ -54,7 +52,7 @@ public class CommentService {
         commentRepository.save(comment);
         return new ScheduleResponseDto(schedule);
     }
-
+    @Transactional
     public ScheduleResponseDto deleteComment(Long scheduleId,Long commentId, User user, HttpServletRequest request) {
         String token = jwtUtil.getJwtFromHeader(request);
         jwtUtil.validateToken(token);
@@ -66,17 +64,13 @@ public class CommentService {
         commentRepository.delete(comment);
         return new ScheduleResponseDto(schedule);
     }
-
-
     private Schedule findSchedule(Long id) {
         return scheduleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 할일이 존재하지 않습니다."));
     }
     private Comment findComment(Long id) {
         return commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
     }
-
     private Boolean checkSelfUser(User user, Comment comment) {
-        return user.getId().equals(comment.getId());
-
+        return user.getUsername().equals(comment.getCreator());
     }
 }
