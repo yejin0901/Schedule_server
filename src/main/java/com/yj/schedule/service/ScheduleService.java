@@ -28,8 +28,6 @@ public class ScheduleService {
         jwtUtil.validateToken(token);
         Schedule schedule = scheduleRepository.save(new Schedule(requestDto, user));
         return new ScheduleResponseDto(schedule);
-
-
     }
 
     @Transactional
@@ -39,7 +37,6 @@ public class ScheduleService {
             log.info("ok");
             return new ScheduleResponseDto("fail-validate-user");
         }
-
         return new ScheduleResponseDto(schedule);
     }
 
@@ -52,7 +49,6 @@ public class ScheduleService {
     public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto, User user, HttpServletRequest request) {
         String token = jwtUtil.getJwtFromHeader(request);
         jwtUtil.validateToken(token);
-
         Schedule schedule = findSchedule(id);
 
         if(!checkSelfUser(user,schedule)){
@@ -61,10 +57,10 @@ public class ScheduleService {
         if (requestDto.getDone().equals("TRUE")) {
             schedule.setDone("TRUE");
         }
+
         schedule.setTitle(requestDto.getTitle());
         schedule.setContents(requestDto.getContents());
         schedule = scheduleRepository.save(schedule);
-
         return new ScheduleResponseDto(schedule);
     }
 
