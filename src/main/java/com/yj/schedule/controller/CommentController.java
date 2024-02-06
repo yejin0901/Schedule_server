@@ -28,7 +28,6 @@ public class CommentController {
             HttpServletRequest request,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
-
         ScheduleResponseDto response =  commentService.createComment(requestDto, scheduleId, request, userDetails.getUser());
             return ResponseEntity.ok()
                     .body(CommonResponse.<ScheduleResponseDto>builder()
@@ -64,7 +63,6 @@ public class CommentController {
                             .build());
         }
     }
-
 
     @DeleteMapping("/schedules/{scheduleId}/comments/{commentId}")
     public  ResponseEntity<CommonResponse<ScheduleResponseDto>> deleteComment(

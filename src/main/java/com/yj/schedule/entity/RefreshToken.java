@@ -17,9 +17,6 @@ public class RefreshToken {
     @Column(name = "token")
     private String token;
 
-    protected RefreshToken() {
-    }
-
     public RefreshToken(Long memberId, String token) {
         this.memberId = memberId;
         this.token = token;

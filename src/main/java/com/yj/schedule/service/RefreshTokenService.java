@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RefreshTokenService {
 
-
     private final RefreshTokenRepository refreshTokenRepository;
 
     @Transactional
@@ -23,7 +22,6 @@ public class RefreshTokenService {
                 .orElseThrow(IllegalArgumentException::new);
         savedToken.validateSameToken(refreshToken);
     }
-
 
     public void saveToken(String refreshtoken, Long id) {
         refreshTokenRepository.save(new RefreshToken(id, refreshtoken));

@@ -31,6 +31,7 @@ public class ScheduleService {
 
 
     }
+
     @Transactional
     public ScheduleResponseDto getSchedule(Long id, User user) {
         Schedule schedule = findSchedule(id);
@@ -41,10 +42,12 @@ public class ScheduleService {
 
         return new ScheduleResponseDto(schedule);
     }
+
     @Transactional
     private Schedule findSchedule(Long id) {
         return scheduleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 할일이 존재하지 않습니다."));
     }
+
     @Transactional
     public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto, User user, HttpServletRequest request) {
         String token = jwtUtil.getJwtFromHeader(request);
@@ -64,13 +67,13 @@ public class ScheduleService {
 
         return new ScheduleResponseDto(schedule);
     }
+
     public List<ScheduleResponseDto> getAllSchedule() {
         return scheduleRepository.findAllByDoneEqualsOrderByCreatedAtDesc("FALSE").stream().map(ScheduleResponseDto::new).toList();
     }
+
     private Boolean checkSelfUser(User user, Schedule schedule) {
         log.info(schedule.getUser().getUsername());
         return user.getUsername().equals(schedule.getUser().getUsername());
     }
-
-
 }

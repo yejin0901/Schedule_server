@@ -37,7 +37,6 @@ public class ScheduleController {
                         .msg("일정이 생성되었습니다.")
                         .data(response)
                         .build());
-
     }
 
     @GetMapping("/schedules/{id}")
@@ -98,5 +97,4 @@ public class ScheduleController {
                             .build());
         }
     }
-
 }

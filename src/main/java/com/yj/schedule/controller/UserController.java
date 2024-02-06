@@ -59,7 +59,6 @@ public class UserController {
                         .build());
     }
 
-
     @GetMapping("/refresh")
     public ResponseEntity<Void> refresh(HttpServletRequest request,@AuthenticationPrincipal UserDetailsImpl userDetails) {
         validateExistHeader(request);
