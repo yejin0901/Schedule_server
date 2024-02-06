@@ -22,6 +22,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
+
     public JwtAuthorizationFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService) {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
@@ -29,15 +30,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
-
         String tokenValue = jwtUtil.getJwtFromHeader(req);
-
         if (StringUtils.hasText(tokenValue)) {
-
             jwtUtil.validateToken(tokenValue);
-
             Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
-
             try {
                 setAuthentication(info.getSubject());
             } catch (Exception e) {
@@ -53,7 +49,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         Authentication authentication = createAuthentication(username);
         context.setAuthentication(authentication);
-
         SecurityContextHolder.setContext(context);
     }
     // 인증 객체 생성
