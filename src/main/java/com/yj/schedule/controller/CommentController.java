@@ -25,10 +25,9 @@ public class CommentController {
     public ResponseEntity<CommonResponse<ScheduleResponseDto>> createComment(
             @PathVariable Long scheduleId,
             @RequestBody CommentRequestDto requestDto,
-            HttpServletRequest request,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
-        ScheduleResponseDto response =  commentService.createComment(requestDto, scheduleId, request, userDetails.getUser());
+        ScheduleResponseDto response =  commentService.createComment(requestDto, scheduleId, userDetails.getUser());
             return ResponseEntity.ok()
                     .body(CommonResponse.<ScheduleResponseDto>builder()
                             .statusCode(HttpStatus.OK.value())
@@ -42,10 +41,9 @@ public class CommentController {
             @PathVariable Long scheduleId,
             @PathVariable Long commentId,
             @RequestBody CommentRequestDto requestDto,
-            HttpServletRequest request,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
-        ScheduleResponseDto response = commentService.updateComment(requestDto, scheduleId, commentId, userDetails.getUser(), request);
+        ScheduleResponseDto response = commentService.updateComment(requestDto, scheduleId, commentId, userDetails.getUser());
         if(response.getSuccess().equals("fail-validate-user")){
             return ResponseEntity.badRequest()
                     .body(CommonResponse.<ScheduleResponseDto>builder()
@@ -68,10 +66,9 @@ public class CommentController {
     public  ResponseEntity<CommonResponse<ScheduleResponseDto>> deleteComment(
             @PathVariable Long scheduleId,
             @PathVariable Long commentId,
-            HttpServletRequest request,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
-        ScheduleResponseDto response = commentService.deleteComment(scheduleId,commentId,userDetails.getUser(), request);
+        ScheduleResponseDto response = commentService.deleteComment(scheduleId,commentId,userDetails.getUser());
         if(response.getSuccess().equals("fail-validate-user")){
             return ResponseEntity.badRequest()
                     .body(CommonResponse.<ScheduleResponseDto>builder()

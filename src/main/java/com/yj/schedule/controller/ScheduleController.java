@@ -28,9 +28,8 @@ public class ScheduleController {
     @PostMapping("/schedules")
     public ResponseEntity<CommonResponse<ScheduleResponseDto>> createSchedule(
             @RequestBody ScheduleRequestDto requestDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            HttpServletRequest request) {
-        ScheduleResponseDto response = scheduleService.createSchedule(requestDto, userDetails.getUser(), request);
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        ScheduleResponseDto response = scheduleService.createSchedule(requestDto, userDetails.getUser());
         return ResponseEntity.ok()
                 .body(CommonResponse.<ScheduleResponseDto>builder()
                         .statusCode(HttpStatus.OK.value())
@@ -77,9 +76,8 @@ public class ScheduleController {
     public ResponseEntity<CommonResponse<ScheduleResponseDto>> updateSchedule(
             @PathVariable Long id,
             @RequestBody ScheduleRequestDto requestDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            HttpServletRequest request){
-        ScheduleResponseDto response = scheduleService.updateSchedule(id, requestDto,userDetails.getUser(), request);
+            @AuthenticationPrincipal UserDetailsImpl userDetails){
+        ScheduleResponseDto response = scheduleService.updateSchedule(id, requestDto,userDetails.getUser());
         if(response.getSuccess().equals("fail-validate-user")){
             return ResponseEntity.badRequest()
                     .body(CommonResponse.<ScheduleResponseDto>builder()

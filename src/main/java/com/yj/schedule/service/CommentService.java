@@ -26,9 +26,7 @@ public class CommentService {
     private final ScheduleRepository scheduleRepository;
     private final JwtUtil jwtUtil;
 
-    public ScheduleResponseDto createComment(CommentRequestDto requestDto, Long scheduleId, HttpServletRequest request, User user) {
-        String token = jwtUtil.getJwtFromHeader(request);
-        jwtUtil.validateToken(token);
+    public ScheduleResponseDto createComment(CommentRequestDto requestDto, Long scheduleId, User user) {
         Schedule schedule = findSchedule(scheduleId);
         if(scheduleRepository.findById(scheduleId).isPresent()) {
             Comment comment = commentRepository.save(new Comment(requestDto, schedule, user));
@@ -41,9 +39,7 @@ public class CommentService {
     }
 
     @Transactional
-    public ScheduleResponseDto updateComment(CommentRequestDto requestDto,Long scheduleId, Long commentId, User user, HttpServletRequest request) {
-        String token = jwtUtil.getJwtFromHeader(request);
-        jwtUtil.validateToken(token);
+    public ScheduleResponseDto updateComment(CommentRequestDto requestDto,Long scheduleId, Long commentId, User user) {
         Schedule schedule = findSchedule(scheduleId);
         Comment comment = findComment(commentId);
         if(!checkSelfUser(user, comment)){
@@ -55,9 +51,7 @@ public class CommentService {
     }
 
     @Transactional
-    public ScheduleResponseDto deleteComment(Long scheduleId,Long commentId, User user, HttpServletRequest request) {
-        String token = jwtUtil.getJwtFromHeader(request);
-        jwtUtil.validateToken(token);
+    public ScheduleResponseDto deleteComment(Long scheduleId,Long commentId, User user) {
         Schedule schedule = findSchedule(scheduleId);
         Comment comment = findComment(commentId);
         if(!checkSelfUser(user, comment)){

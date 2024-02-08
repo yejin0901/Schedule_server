@@ -23,9 +23,7 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final JwtUtil jwtUtil;
 
-    public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto, User user, HttpServletRequest request) {
-        String token = jwtUtil.getJwtFromHeader(request);
-        jwtUtil.validateToken(token);
+    public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto, User user) {
         Schedule schedule = scheduleRepository.save(new Schedule(requestDto, user));
         return new ScheduleResponseDto(schedule);
     }
@@ -46,9 +44,7 @@ public class ScheduleService {
     }
 
     @Transactional
-    public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto, User user, HttpServletRequest request) {
-        String token = jwtUtil.getJwtFromHeader(request);
-        jwtUtil.validateToken(token);
+    public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto, User user) {
         Schedule schedule = findSchedule(id);
 
         if(!checkSelfUser(user,schedule)){
