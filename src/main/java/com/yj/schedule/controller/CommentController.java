@@ -43,22 +43,17 @@ public class CommentController {
             @RequestBody CommentRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
-        ScheduleResponseDto response = commentService.updateComment(requestDto, scheduleId, commentId, userDetails.getUser());
-        if(response.getSuccess().equals("fail-validate-user")){
+        try{
+            ScheduleResponseDto response = commentService.updateComment(requestDto, scheduleId, commentId, userDetails.getUser());
             return ResponseEntity.badRequest()
                     .body(CommonResponse.<ScheduleResponseDto>builder()
                             .statusCode(HttpStatus.BAD_REQUEST.value())
                             .msg("작성자만 수정/삭제할 수 있습니다.")
                             .data(response)
                             .build());
-        }
-        else {
-            return ResponseEntity.ok()
-                    .body(CommonResponse.<ScheduleResponseDto>builder()
-                            .statusCode(HttpStatus.OK.value())
-                            .msg("댓글이 수정되었습니다.")
-                            .data(response)
-                            .build());
+        } catch (Exception e){
+            return ResponseEntity.badRequest()
+                    .body(new CommonResponse<>(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
         }
     }
 
@@ -68,22 +63,17 @@ public class CommentController {
             @PathVariable Long commentId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
-        ScheduleResponseDto response = commentService.deleteComment(scheduleId,commentId,userDetails.getUser());
-        if(response.getSuccess().equals("fail-validate-user")){
+        try{
+            ScheduleResponseDto response = commentService.deleteComment(scheduleId,commentId,userDetails.getUser());
             return ResponseEntity.badRequest()
                     .body(CommonResponse.<ScheduleResponseDto>builder()
                             .statusCode(HttpStatus.BAD_REQUEST.value())
                             .msg("작성자만 수정/삭제할 수 있습니다.")
                             .data(response)
                             .build());
-        }
-        else {
-            return ResponseEntity.ok()
-                    .body(CommonResponse.<ScheduleResponseDto>builder()
-                            .statusCode(HttpStatus.OK.value())
-                            .msg("댓글이 삭제되었습니다.")
-                            .data(response)
-                            .build());
+        } catch (Exception e){
+            return ResponseEntity.badRequest()
+                .body(new CommonResponse<>(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
         }
     }
 }

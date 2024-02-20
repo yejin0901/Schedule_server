@@ -7,13 +7,13 @@ import com.yj.schedule.entity.Schedule;
 import com.yj.schedule.entity.User;
 import com.yj.schedule.jwt.JwtUtil;
 import com.yj.schedule.repository.ScheduleRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.RejectedExecutionException;
 
 @Slf4j
 @Service
@@ -21,7 +21,6 @@ import java.util.List;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
-    private final JwtUtil jwtUtil;
 
     public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto, User user) {
         Schedule schedule = scheduleRepository.save(new Schedule(requestDto, user));
@@ -33,7 +32,7 @@ public class ScheduleService {
         Schedule schedule = findSchedule(id);
         if(!checkSelfUser(user,schedule)){
             log.info("ok");
-            return new ScheduleResponseDto("fail-validate-user");
+            throw new RejectedExecutionException("해당 사용자가 아닙니다.");
         }
         return new ScheduleResponseDto(schedule);
     }
@@ -48,7 +47,7 @@ public class ScheduleService {
         Schedule schedule = findSchedule(id);
 
         if(!checkSelfUser(user,schedule)){
-            return new ScheduleResponseDto(("fail-validate-user"));
+            throw new RejectedExecutionException("해당 사용자가 아닙니다.");
         }
         if (requestDto.getDone().equals("TRUE")) {
             schedule.setDone("TRUE");

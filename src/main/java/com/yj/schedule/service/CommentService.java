@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.concurrent.RejectedExecutionException;
 import java.util.logging.Logger;
 @Slf4j
 @Service
@@ -24,7 +25,6 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final ScheduleRepository scheduleRepository;
-    private final JwtUtil jwtUtil;
 
     public ScheduleResponseDto createComment(CommentRequestDto requestDto, Long scheduleId, User user) {
         Schedule schedule = findSchedule(scheduleId);
@@ -43,7 +43,7 @@ public class CommentService {
         Schedule schedule = findSchedule(scheduleId);
         Comment comment = findComment(commentId);
         if(!checkSelfUser(user, comment)){
-            return new ScheduleResponseDto(("fail-validate-user"));
+            throw new RejectedExecutionException("해당 사용자가 아닙니다.");
         }
         comment.setComments(requestDto.getComments());
         commentRepository.save(comment);
@@ -55,7 +55,7 @@ public class CommentService {
         Schedule schedule = findSchedule(scheduleId);
         Comment comment = findComment(commentId);
         if(!checkSelfUser(user, comment)){
-            return new ScheduleResponseDto(("fail-validate-user"));
+            throw new RejectedExecutionException("해당 사용자가 아닙니다.");
         }
         commentRepository.delete(comment);
         return new ScheduleResponseDto(schedule);

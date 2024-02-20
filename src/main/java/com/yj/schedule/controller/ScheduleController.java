@@ -29,34 +29,34 @@ public class ScheduleController {
     public ResponseEntity<CommonResponse<ScheduleResponseDto>> createSchedule(
             @RequestBody ScheduleRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        ScheduleResponseDto response = scheduleService.createSchedule(requestDto, userDetails.getUser());
-        return ResponseEntity.ok()
-                .body(CommonResponse.<ScheduleResponseDto>builder()
-                        .statusCode(HttpStatus.OK.value())
-                        .msg("일정이 생성되었습니다.")
-                        .data(response)
-                        .build());
+        try{
+            ScheduleResponseDto response = scheduleService.createSchedule(requestDto, userDetails.getUser());
+            return ResponseEntity.ok()
+                    .body(CommonResponse.<ScheduleResponseDto>builder()
+                            .statusCode(HttpStatus.OK.value())
+                            .msg("일정이 생성되었습니다.")
+                            .data(response)
+                            .build());
+        }catch (Exception e){
+            return ResponseEntity.badRequest()
+                    .body(new CommonResponse<>(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+        }
+
     }
 
     @GetMapping("/schedules/{id}")
     public  ResponseEntity<CommonResponse<ScheduleResponseDto>> getSelectSchedule(@PathVariable Long id,@AuthenticationPrincipal UserDetailsImpl userDetails){
-        ScheduleResponseDto response = scheduleService.getSchedule(id, userDetails.getUser());
-        log.info(response.getSuccess());
-        if(response.getSuccess().equals("fail-validate-user")){
-            log.info("controller");
+        try{
+            ScheduleResponseDto response = scheduleService.getSchedule(id, userDetails.getUser());
             return ResponseEntity.badRequest()
                     .body(CommonResponse.<ScheduleResponseDto>builder()
                             .statusCode(HttpStatus.BAD_REQUEST.value())
-                            .msg("작성자만 조회할 수 있습니다.")
-                            .build());
-        }
-        else {
-            return ResponseEntity.ok()
-                    .body(CommonResponse.<ScheduleResponseDto>builder()
-                            .statusCode(HttpStatus.OK.value())
                             .msg("일정이 조회되었습니다.")
                             .data(response)
                             .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(new CommonResponse<>(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
         }
 
     }
@@ -77,22 +77,17 @@ public class ScheduleController {
             @PathVariable Long id,
             @RequestBody ScheduleRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
-        ScheduleResponseDto response = scheduleService.updateSchedule(id, requestDto,userDetails.getUser());
-        if(response.getSuccess().equals("fail-validate-user")){
+        try{
+            ScheduleResponseDto response = scheduleService.updateSchedule(id, requestDto,userDetails.getUser());
             return ResponseEntity.badRequest()
                     .body(CommonResponse.<ScheduleResponseDto>builder()
                             .statusCode(HttpStatus.BAD_REQUEST.value())
-                            .msg("작성자만 수정/삭제할 수 있습니다.")
-                            .data(response)
-                            .build());
-        }
-        else {
-            return ResponseEntity.ok()
-                    .body(CommonResponse.<ScheduleResponseDto>builder()
-                            .statusCode(HttpStatus.OK.value())
                             .msg("일정이 수정되었습니다.")
                             .data(response)
                             .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(new CommonResponse<>(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
         }
     }
 }
