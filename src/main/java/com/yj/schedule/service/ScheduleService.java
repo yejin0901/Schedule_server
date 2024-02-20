@@ -38,13 +38,15 @@ public class ScheduleService {
     }
 
     @Transactional
-    private Schedule findSchedule(Long id) {
+    public Schedule findSchedule(Long id) {
         return scheduleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 할일이 존재하지 않습니다."));
     }
 
     @Transactional
     public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto requestDto, User user) {
         Schedule schedule = findSchedule(id);
+
+        System.out.println("find : " + schedule.getId());
 
         if(!checkSelfUser(user,schedule)){
             throw new RejectedExecutionException("해당 사용자가 아닙니다.");
@@ -55,7 +57,10 @@ public class ScheduleService {
 
         schedule.setTitle(requestDto.getTitle());
         schedule.setContents(requestDto.getContents());
-        schedule = scheduleRepository.save(schedule);
+        scheduleRepository.save(schedule);
+
+
+
         return new ScheduleResponseDto(schedule);
     }
 

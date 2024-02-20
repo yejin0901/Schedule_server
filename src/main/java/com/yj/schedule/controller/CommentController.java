@@ -6,6 +6,7 @@ import com.yj.schedule.dto.ScheduleResponseDto;
 import com.yj.schedule.security.UserDetailsImpl;
 import com.yj.schedule.service.CommentService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
-@RequiredArgsConstructor
+@AllArgsConstructor
 @RequestMapping("/api")
 public class CommentController {
 
@@ -45,7 +46,7 @@ public class CommentController {
     ){
         try{
             ScheduleResponseDto response = commentService.updateComment(requestDto, scheduleId, commentId, userDetails.getUser());
-            return ResponseEntity.badRequest()
+            return ResponseEntity.ok()
                     .body(CommonResponse.<ScheduleResponseDto>builder()
                             .statusCode(HttpStatus.BAD_REQUEST.value())
                             .msg("작성자만 수정/삭제할 수 있습니다.")
@@ -65,7 +66,7 @@ public class CommentController {
     ){
         try{
             ScheduleResponseDto response = commentService.deleteComment(scheduleId,commentId,userDetails.getUser());
-            return ResponseEntity.badRequest()
+            return ResponseEntity.ok()
                     .body(CommonResponse.<ScheduleResponseDto>builder()
                             .statusCode(HttpStatus.BAD_REQUEST.value())
                             .msg("작성자만 수정/삭제할 수 있습니다.")

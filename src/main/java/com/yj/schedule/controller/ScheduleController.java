@@ -1,12 +1,12 @@
 package com.yj.schedule.controller;
 
-
 import com.yj.schedule.dto.CommonResponse;
 import com.yj.schedule.dto.ScheduleRequestDto;
 import com.yj.schedule.dto.ScheduleResponseDto;
 import com.yj.schedule.security.UserDetailsImpl;
 import com.yj.schedule.service.ScheduleService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @Slf4j
 @RestController
-@RequiredArgsConstructor
+@AllArgsConstructor
 @RequestMapping("/api")
 public class ScheduleController {
-
     private final ScheduleService scheduleService;
 
     @PostMapping("/schedules")
@@ -48,9 +48,9 @@ public class ScheduleController {
     public  ResponseEntity<CommonResponse<ScheduleResponseDto>> getSelectSchedule(@PathVariable Long id,@AuthenticationPrincipal UserDetailsImpl userDetails){
         try{
             ScheduleResponseDto response = scheduleService.getSchedule(id, userDetails.getUser());
-            return ResponseEntity.badRequest()
+            return ResponseEntity.ok()
                     .body(CommonResponse.<ScheduleResponseDto>builder()
-                            .statusCode(HttpStatus.BAD_REQUEST.value())
+                            .statusCode(HttpStatus.OK.value())
                             .msg("일정이 조회되었습니다.")
                             .data(response)
                             .build());
@@ -79,7 +79,7 @@ public class ScheduleController {
             @AuthenticationPrincipal UserDetailsImpl userDetails){
         try{
             ScheduleResponseDto response = scheduleService.updateSchedule(id, requestDto,userDetails.getUser());
-            return ResponseEntity.badRequest()
+            return ResponseEntity.ok()
                     .body(CommonResponse.<ScheduleResponseDto>builder()
                             .statusCode(HttpStatus.BAD_REQUEST.value())
                             .msg("일정이 수정되었습니다.")

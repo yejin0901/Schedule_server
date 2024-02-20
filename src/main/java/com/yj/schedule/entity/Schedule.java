@@ -27,7 +27,7 @@ public class Schedule extends Timestamped {
     @Column(nullable = false)
     private String done;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 

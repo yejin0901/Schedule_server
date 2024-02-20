@@ -34,9 +34,4 @@ public class ScheduleResponseDto{
         this.success = "success";
     }
 
-    public ScheduleResponseDto(String message)
-    {
-        this.success = message;
-    }
-
 }

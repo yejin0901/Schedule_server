@@ -24,7 +24,7 @@ public class Comment {
     @Column(nullable = false, length = 200)
     private String creator;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
@@ -32,10 +32,6 @@ public class Comment {
         this.schedule = schedule;
         this.comments = requestDto.getComments();
         this.creator = user.getUsername();
-    }
-
-    public void updateComment(CommentRequestDto requestDto){
-        this.comments = requestDto.getComments();
     }
 
 }
