@@ -8,10 +8,8 @@ import com.yj.schedule.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -22,13 +20,10 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class) // @Mock 사용을 위해 설정합니다.
 public class UserServiceTest {
-
     @Mock
     private UserRepository userRepository;
-
     @Mock
     private PasswordEncoder passwordEncoder;
-
 
     @Test
     public void testSignup_Successful() {
@@ -40,7 +35,7 @@ public class UserServiceTest {
 
         given(userRepository.findByUsername(requestDto.getUsername())).willReturn(Optional.empty());
         given(passwordEncoder.encode(requestDto.getPassword())).willReturn(encodedPassword);
-        UserService userService = new UserService(userRepository,passwordEncoder);
+        UserService userService = new UserService(userRepository, passwordEncoder);
 
         // When
         Boolean result = userService.signup(requestDto);
@@ -63,9 +58,8 @@ public class UserServiceTest {
         requestDto.setUsername("existingUser");
         requestDto.setPassword("existingPassword");
         User existingUser = new User("existingUser", "existingPassword", UserRoleEnum.USER);
-
         given(userRepository.findByUsername(requestDto.getUsername())).willReturn(Optional.of(existingUser));
-        UserService userService = new UserService(userRepository,passwordEncoder);
+        UserService userService = new UserService(userRepository, passwordEncoder);
 
         // When
         Boolean result = userService.signup(requestDto);

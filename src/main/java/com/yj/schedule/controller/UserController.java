@@ -46,7 +46,7 @@ public class UserController {
             }
         }
         if (!userService.signup(requestDto)) {
-                return ResponseEntity.badRequest()
+                return ResponseEntity.ok()
                         .body(CommonResponse.builder()
                                 .statusCode(HttpStatus.BAD_REQUEST.value())
                                 .msg("중복된 username 입니다.")

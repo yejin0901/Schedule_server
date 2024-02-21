@@ -3,42 +3,28 @@ package com.yj.schedule.Controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yj.schedule.config.WebSecurityConfig;
 import com.yj.schedule.controller.ScheduleController;
-import com.yj.schedule.controller.UserController;
 import com.yj.schedule.dto.ScheduleRequestDto;
-import com.yj.schedule.dto.ScheduleResponseDto;
 import com.yj.schedule.entity.User;
 import com.yj.schedule.entity.UserRoleEnum;
 import com.yj.schedule.security.UserDetailsImpl;
-import com.yj.schedule.service.RefreshTokenService;
 import com.yj.schedule.service.ScheduleService;
-import com.yj.schedule.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.time.LocalDateTime;
-import java.util.Collections;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @WebMvcTest(
@@ -52,19 +38,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 )
 class ScheduleControllerTest {
 
+    @MockBean
+    ScheduleService scheduleService;
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
     private ObjectMapper objectMapper;
-
     @Autowired
     private WebApplicationContext context;
     private UsernamePasswordAuthenticationToken mockPrincipal;
-
-    @MockBean
-    ScheduleService scheduleService;
-
 
     @BeforeEach
     public void setup() {
@@ -75,7 +57,6 @@ class ScheduleControllerTest {
     }
 
     private void mockUserSetup() {
-
         User testUser = new User("test1234", "pwpw1234", UserRoleEnum.USER);
         UserDetailsImpl testUserDetails = new UserDetailsImpl(testUser);
         mockPrincipal = new UsernamePasswordAuthenticationToken(testUserDetails, "", testUserDetails.getAuthorities());
@@ -83,7 +64,6 @@ class ScheduleControllerTest {
 
     @Test
     public void testCreateSchedule() throws Exception {
-
         this.mockUserSetup();
         ScheduleRequestDto requestDto = new ScheduleRequestDto();
         requestDto.setTitle("Test Title");
@@ -99,7 +79,6 @@ class ScheduleControllerTest {
 
     @Test
     public void testGetSelectSchedule() throws Exception {
-
         this.mockUserSetup();
         Long scheduleId = 1L;
 
@@ -113,7 +92,6 @@ class ScheduleControllerTest {
 
     @Test
     public void testGetAllSchedule() throws Exception {
-
         this.mockUserSetup();
 
         mockMvc.perform(get("/api/all-schedules")
@@ -125,7 +103,6 @@ class ScheduleControllerTest {
 
     @Test
     public void testUpdateSchedule() throws Exception {
-
         this.mockUserSetup();
         Long scheduleId = 1L;
 

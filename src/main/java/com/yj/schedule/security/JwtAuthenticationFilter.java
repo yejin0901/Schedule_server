@@ -10,23 +10,32 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @Slf4j(topic = "로그인 및 JWT 생성")
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final JwtUtil jwtUtil;
     private final RefreshTokenService refreshTokenService;
-    public JwtAuthenticationFilter(JwtUtil jwtUtil, RefreshTokenService refreshTokenService) {
+
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtUtil jwtUtil, RefreshTokenService refreshTokenService) {
+        super(authenticationManager);
         this.jwtUtil = jwtUtil;
         this.refreshTokenService = refreshTokenService;
         setFilterProcessesUrl("/api/user/login");
     }
+//    public JwtAuthenticationFilter(JwtUtil jwtUtil, RefreshTokenService refreshTokenService) {
+//        this.jwtUtil = jwtUtil;
+//        this.refreshTokenService = refreshTokenService;
+//        setFilterProcessesUrl("/api/user/login");
+//    }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -42,18 +51,29 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws ServletException, IOException {
-        log.info("로그인 성공");
-        String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
-        UserRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
+    public void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws ServletException, IOException {
+        if (authResult.getPrincipal() instanceof UserDetailsImpl) {
+            UserDetailsImpl userDetails = (UserDetailsImpl) authResult.getPrincipal();
+            String username = userDetails.getUsername();
+            UserRoleEnum role = userDetails.getUser().getRole();
 
-        String accesstoken = jwtUtil.createAccessToken(username, role);
-        String refreshtoken = jwtUtil.createRefreshToken(username);
-        refreshTokenService.saveToken(refreshtoken, ((UserDetailsImpl) authResult.getPrincipal()).getUser().getId());
+            String accessToken = jwtUtil.createAccessToken(username, role);
+            String refreshToken = jwtUtil.createRefreshToken(username);
+            refreshTokenService.saveToken(refreshToken, userDetails.getUser().getId());
 
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, accesstoken);
-        response.setStatus(HttpServletResponse.SC_OK); // 상태 코드 설정
-        response.getWriter().println("로그인이 완료되었습니다."); // 응답 본문 작성
+            response.addHeader(JwtUtil.AUTHORIZATION_HEADER, accessToken);
+            response.addHeader("Cache-Control", "no-store"); // Add Cache-Control header
+            response.setStatus(HttpServletResponse.SC_OK); // Set status code before getting PrintWriter
+
+            PrintWriter writer = response.getWriter();
+            writer.println("로그인이 완료되었습니다."); // Print response body
+            writer.flush(); // Flush the writer to ensure the message is sent
+        } else {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            PrintWriter writer = response.getWriter();
+            writer.println("사용자 정보를 찾을 수 없습니다."); // Print response body
+            writer.flush(); // Flush the writer to ensure the message is sent
+        }
     }
 
     @Override

@@ -5,13 +5,11 @@ import com.yj.schedule.config.WebSecurityConfig;
 import com.yj.schedule.controller.CommentController;
 import com.yj.schedule.controller.ScheduleController;
 import com.yj.schedule.dto.CommentRequestDto;
-import com.yj.schedule.entity.Schedule;
 import com.yj.schedule.entity.User;
 import com.yj.schedule.entity.UserRoleEnum;
 import com.yj.schedule.security.UserDetailsImpl;
 import com.yj.schedule.service.CommentService;
 import com.yj.schedule.service.ScheduleService;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +23,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -41,24 +38,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                 )
         }
 )
-
 class CommentControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private WebApplicationContext context;
-    private UsernamePasswordAuthenticationToken mockPrincipal;
 
     @MockBean
     ScheduleService scheduleService;
-
     @MockBean
     CommentService commentService;
+    @Autowired
+    private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
+    @Autowired
+    private WebApplicationContext context;
+    private UsernamePasswordAuthenticationToken mockPrincipal;
 
     @BeforeEach
     public void setup() {
@@ -69,7 +61,6 @@ class CommentControllerTest {
     }
 
     private void mockUserSetup() {
-
         User testUser = new User("test1234", "pwpw1234", UserRoleEnum.USER);
         UserDetailsImpl testUserDetails = new UserDetailsImpl(testUser);
         mockPrincipal = new UsernamePasswordAuthenticationToken(testUserDetails, "", testUserDetails.getAuthorities());
@@ -78,7 +69,6 @@ class CommentControllerTest {
 
     @Test
     public void testCreateComment() throws Exception {
-
         this.mockUserSetup();
         CommentRequestDto requestDto = new CommentRequestDto("test comment");
         Long scheduleId = 1L;
@@ -93,7 +83,6 @@ class CommentControllerTest {
 
     @Test
     public void testUpdateComment() throws Exception {
-
         this.mockUserSetup();
         CommentRequestDto requestDto = new CommentRequestDto();
         requestDto.setComments("test comment");
@@ -110,7 +99,6 @@ class CommentControllerTest {
 
     @Test
     public void testDeleteComment() throws Exception {
-
         this.mockUserSetup();
         Long scheduleId = 1L;
         Long commentId = 1L;

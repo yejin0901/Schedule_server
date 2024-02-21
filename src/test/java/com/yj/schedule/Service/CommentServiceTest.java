@@ -1,6 +1,5 @@
 package com.yj.schedule.Service;
 
-import com.yj.schedule.Controller.MockSpringSecurityFilter;
 import com.yj.schedule.dto.CommentRequestDto;
 import com.yj.schedule.dto.ScheduleRequestDto;
 import com.yj.schedule.dto.ScheduleResponseDto;
@@ -11,37 +10,28 @@ import com.yj.schedule.entity.UserRoleEnum;
 import com.yj.schedule.repository.CommentRepository;
 import com.yj.schedule.repository.ScheduleRepository;
 import com.yj.schedule.service.CommentService;
-import static org.mockito.BDDMockito.given;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.then;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 @ExtendWith(MockitoExtension.class) // @Mock 사용을 위해 설정합니다.
 public class CommentServiceTest {
-
-
     @Mock
     private CommentRepository commentRepository;
-
     @Mock
     private ScheduleRepository scheduleRepository;
-
     @InjectMocks
     private CommentService commentService;
-
     private Schedule testSchedule;
     private User user;
 
@@ -50,7 +40,7 @@ public class CommentServiceTest {
         ScheduleRequestDto requestDto = new ScheduleRequestDto();
         requestDto.setTitle("title 1");
         requestDto.setContents("content 1");
-        user = new User("test","1234", UserRoleEnum.USER);
+        user = new User("test", "1234", UserRoleEnum.USER);
         user.setUsername("test");
         testSchedule = new Schedule(requestDto, user);
     }
@@ -100,7 +90,6 @@ public class CommentServiceTest {
         user.setUsername("test");
         Schedule schedule = new Schedule();
         Comment comment = new Comment(new CommentRequestDto("Test comment"), schedule, user);
-
         given(scheduleRepository.findById(scheduleId)).willReturn(Optional.of(testSchedule));
         given(commentRepository.findById(commentId)).willReturn(Optional.of(comment));
 

@@ -1,20 +1,20 @@
 package com.yj.schedule.Entity;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.yj.schedule.dto.CommentRequestDto;
 import com.yj.schedule.dto.ScheduleRequestDto;
 import com.yj.schedule.entity.Comment;
-import com.yj.schedule.entity.User;
 import com.yj.schedule.entity.Schedule;
+import com.yj.schedule.entity.User;
 import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ScheduleCommentEntityTest {
     @Test
     public void testScheduleEntityConstructor() {
-
         // given
         String title = "Test Title";
         String contents = "Test Contents";
@@ -35,7 +35,6 @@ class ScheduleCommentEntityTest {
 
     @Test
     public void testScheduleEntityCommentList() {
-
         // given
         Schedule schedule = new Schedule();
         User user = new User();

@@ -28,6 +28,7 @@ public class WebSecurityConfig {
     private final UserDetailsServiceImpl userDetailsService;
     private final RefreshTokenService refreshTokenService;
     private final AuthenticationConfiguration authenticationConfiguration;
+    private AuthenticationManager authenticationManager;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -41,7 +42,7 @@ public class WebSecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil, refreshTokenService);
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(authenticationManager, jwtUtil, refreshTokenService);
         filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
         return filter;
     }

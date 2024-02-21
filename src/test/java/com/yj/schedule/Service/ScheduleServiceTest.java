@@ -5,30 +5,26 @@ import com.yj.schedule.dto.ScheduleResponseDto;
 import com.yj.schedule.entity.Schedule;
 import com.yj.schedule.entity.User;
 import com.yj.schedule.repository.ScheduleRepository;
-import com.yj.schedule.service.CommentService;
 import com.yj.schedule.service.ScheduleService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class) // @Mock 사용을 위해 설정합니다.
 public class ScheduleServiceTest {
-
     @Mock
     private ScheduleRepository scheduleRepository;
-
     @InjectMocks
     private ScheduleService scheduleService;
-
 
     @Test
     public void testCreateSchedule() {
@@ -38,7 +34,6 @@ public class ScheduleServiceTest {
         ScheduleRequestDto requestDto = new ScheduleRequestDto();
         requestDto.setContents("content 1");
         requestDto.setTitle("title 1");
-
         Schedule schedule = new Schedule(requestDto, user);
         given(scheduleRepository.save(any(Schedule.class))).willReturn(schedule);
 

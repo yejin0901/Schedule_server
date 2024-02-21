@@ -7,8 +7,6 @@ import com.yj.schedule.entity.Schedule;
 import com.yj.schedule.entity.User;
 import com.yj.schedule.entity.UserRoleEnum;
 import com.yj.schedule.repository.CommentRepository;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -20,14 +18,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 public class CommentRepositoryTest {
-
     @Autowired
     private CommentRepository commentRepository;
-
     private User user;
     private Schedule schedule;
 
-    public void setup(){
+    public void setup() {
         user = new User("test1234", "pwpw1234", UserRoleEnum.USER);
         ScheduleRequestDto requestDto = new ScheduleRequestDto();
         requestDto.setContents("test contents");
