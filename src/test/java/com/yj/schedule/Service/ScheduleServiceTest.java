@@ -83,7 +83,7 @@ public class ScheduleServiceTest {
         existingSchedule.setDone("FALSE");
         existingSchedule.setUser(user);
 
-        when(scheduleRepository.findById(scheduleId)).thenReturn(Optional.of(existingSchedule));
+        given(scheduleRepository.findById(scheduleId)).willReturn(Optional.of(existingSchedule));
 
         // when
         ScheduleResponseDto responseDto = scheduleService.updateSchedule(scheduleId, requestDto, user);
@@ -99,7 +99,6 @@ public class ScheduleServiceTest {
     @Test
     public void testGetAllSchedule() {
         // When
-        ScheduleService scheduleService = new ScheduleService(scheduleRepository);
         scheduleService.getAllSchedule();
         // Then
         verify(scheduleRepository, times(1)).findAllByDoneEqualsOrderByCreatedAtDesc("FALSE");

@@ -61,7 +61,6 @@ class JwtAuthenticationFilterTest {
         Authentication authentication = mock(Authentication.class);
         given(authenticationManager.authenticate(argThat(authenticationTokens ->
                 "test1234".equals(authenticationToken.getPrincipal()) && "pwpw1234".equals(authenticationToken.getCredentials())))).willReturn(authentication);
-
         // when
         Authentication result = jwtAuthenticationFilter.attemptAuthentication(request, response);
 
@@ -98,13 +97,13 @@ class JwtAuthenticationFilterTest {
         given(userDetails.getUser()).willReturn(user);
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null);
 
-        when(jwtUtil.createAccessToken("username", UserRoleEnum.USER)).thenReturn("access-token");
-        when(jwtUtil.createRefreshToken("username")).thenReturn("refresh-token");
+        given(jwtUtil.createAccessToken("username", UserRoleEnum.USER)).willReturn("access-token");
+        given(jwtUtil.createRefreshToken("username")).willReturn("refresh-token");
 
 
         // http body에 작성
         PrintWriter printWriter = mock(PrintWriter.class);
-        when(response.getWriter()).thenReturn(printWriter);
+        given(response.getWriter()).willReturn(printWriter);
 
         jwtAuthenticationFilter.successfulAuthentication(request, response, chain, authentication);
 
@@ -119,11 +118,9 @@ class JwtAuthenticationFilterTest {
     // ServletInputStream provides a way to read this raw binary data from the request body.
     private static class TestServletInputStream extends ServletInputStream {
         private final InputStream inputStream;
-
         public TestServletInputStream(InputStream inputStream) {
             this.inputStream = inputStream;
         }
-
         @Override
         public int read() throws IOException {
             return inputStream.read();
