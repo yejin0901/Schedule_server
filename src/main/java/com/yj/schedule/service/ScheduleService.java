@@ -31,7 +31,6 @@ public class ScheduleService {
     public ScheduleResponseDto getSchedule(Long id, User user) {
         Schedule schedule = findSchedule(id);
         if(!checkSelfUser(user,schedule)){
-            log.info("ok");
             throw new RejectedExecutionException("해당 사용자가 아닙니다.");
         }
         return new ScheduleResponseDto(schedule);
