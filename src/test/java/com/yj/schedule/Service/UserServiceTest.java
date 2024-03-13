@@ -1,10 +1,10 @@
 package com.yj.schedule.Service;
 
-import com.yj.schedule.dto.SignupRequestDto;
-import com.yj.schedule.entity.User;
-import com.yj.schedule.entity.UserRoleEnum;
-import com.yj.schedule.repository.UserRepository;
-import com.yj.schedule.service.UserService;
+import com.yj.schedule.domain.login.SignupRequestDto;
+import com.yj.schedule.domain.user.User;
+import com.yj.schedule.domain.user.UserRoleEnum;
+import com.yj.schedule.domain.user.UserRepository;
+import com.yj.schedule.domain.user.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
