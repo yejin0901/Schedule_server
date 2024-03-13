@@ -1,7 +1,7 @@
 package com.yj.schedule.security;
 
-import com.yj.schedule.entity.User;
-import com.yj.schedule.repository.UserRepository;
+import com.yj.schedule.domain.user.User;
+import com.yj.schedule.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

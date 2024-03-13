@@ -1,10 +1,10 @@
 package com.yj.schedule.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yj.schedule.dto.LoginRequestDto;
-import com.yj.schedule.entity.UserRoleEnum;
+import com.yj.schedule.domain.login.LoginRequestDto;
+import com.yj.schedule.domain.user.UserRoleEnum;
 import com.yj.schedule.jwt.JwtUtil;
-import com.yj.schedule.service.RefreshTokenService;
+import com.yj.schedule.domain.login.RefreshTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

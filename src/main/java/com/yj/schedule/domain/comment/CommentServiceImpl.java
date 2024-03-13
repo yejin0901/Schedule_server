@@ -1,23 +1,21 @@
-package com.yj.schedule.service;
+package com.yj.schedule.domain.comment;
 
 
-import com.yj.schedule.dto.CommentRequestDto;
-import com.yj.schedule.dto.ScheduleResponseDto;
-import com.yj.schedule.entity.Comment;
-import com.yj.schedule.entity.Schedule;
-import com.yj.schedule.entity.User;
-import com.yj.schedule.jwt.JwtUtil;
-import com.yj.schedule.repository.CommentRepository;
-import com.yj.schedule.repository.ScheduleRepository;
-import jakarta.servlet.http.HttpServletRequest;
+import com.yj.schedule.domain.comment.CommentRequestDto;
+import com.yj.schedule.domain.schedule.ScheduleResponseDto;
+import com.yj.schedule.domain.comment.Comment;
+import com.yj.schedule.domain.schedule.Schedule;
+import com.yj.schedule.domain.user.User;
+import com.yj.schedule.domain.comment.CommentRepository;
+import com.yj.schedule.domain.schedule.ScheduleRepository;
+import com.yj.schedule.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.RejectedExecutionException;
-import java.util.logging.Logger;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -34,7 +32,7 @@ public class CommentService {
             return new ScheduleResponseDto(schedule);
         }
         else{
-            throw new IllegalArgumentException("해당일정이 없습니다.");
+            throw new NotFoundException("해당일정이 없습니다.");
         }
     }
 
@@ -43,7 +41,7 @@ public class CommentService {
         Schedule schedule = findSchedule(scheduleId);
         Comment comment = findComment(commentId);
         if(!checkSelfUser(user, comment)){
-            throw new RejectedExecutionException("해당 사용자가 아닙니다.");
+            throw new NotFoundException("해당 사용자가 아닙니다.");
         }
         comment.setComments(requestDto.getComments());
         commentRepository.save(comment);
@@ -55,18 +53,18 @@ public class CommentService {
         Schedule schedule = findSchedule(scheduleId);
         Comment comment = findComment(commentId);
         if(!checkSelfUser(user, comment)){
-            throw new RejectedExecutionException("해당 사용자가 아닙니다.");
+            throw new NotFoundException("해당 사용자가 아닙니다.");
         }
         commentRepository.delete(comment);
         return new ScheduleResponseDto(schedule);
     }
 
     private Schedule findSchedule(Long id) {
-        return scheduleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 할일이 존재하지 않습니다."));
+        return scheduleRepository.findById(id).orElseThrow(() -> new NotFoundException("해당 할일이 존재하지 않습니다."));
     }
 
     private Comment findComment(Long id) {
-        return commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
+        return commentRepository.findById(id).orElseThrow(() -> new NotFoundException("해당 댓글이 존재하지 않습니다."));
     }
 
     private Boolean checkSelfUser(User user, Comment comment) {

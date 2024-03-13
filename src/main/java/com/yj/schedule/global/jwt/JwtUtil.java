@@ -1,7 +1,7 @@
 package com.yj.schedule.jwt;
 
-import com.yj.schedule.dto.CommonResponse;
-import com.yj.schedule.entity.UserRoleEnum;
+import com.yj.schedule.global.CommonResponse;
+import com.yj.schedule.domain.user.UserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;

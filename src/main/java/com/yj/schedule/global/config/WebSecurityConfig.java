@@ -4,7 +4,7 @@ import com.yj.schedule.jwt.JwtUtil;
 import com.yj.schedule.security.JwtAuthenticationFilter;
 import com.yj.schedule.security.JwtAuthorizationFilter;
 import com.yj.schedule.security.UserDetailsServiceImpl;
-import com.yj.schedule.service.RefreshTokenService;
+import com.yj.schedule.domain.login.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
