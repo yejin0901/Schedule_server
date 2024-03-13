@@ -1,11 +1,11 @@
 package com.yj.schedule.Repository;
 
 
-import com.yj.schedule.dto.ScheduleRequestDto;
-import com.yj.schedule.entity.Schedule;
-import com.yj.schedule.entity.User;
-import com.yj.schedule.entity.UserRoleEnum;
-import com.yj.schedule.repository.ScheduleRepository;
+import com.yj.schedule.domain.schedule.ScheduleRequestDto;
+import com.yj.schedule.domain.schedule.Schedule;
+import com.yj.schedule.domain.user.User;
+import com.yj.schedule.domain.user.UserRoleEnum;
+import com.yj.schedule.domain.schedule.ScheduleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

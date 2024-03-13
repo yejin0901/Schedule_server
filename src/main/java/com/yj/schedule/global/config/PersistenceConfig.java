@@ -1,4 +1,4 @@
-package com.yj.schedule.config;
+package com.yj.schedule.global.config;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

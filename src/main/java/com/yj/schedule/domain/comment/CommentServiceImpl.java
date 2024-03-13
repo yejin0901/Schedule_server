@@ -1,12 +1,9 @@
 package com.yj.schedule.domain.comment;
 
 
-import com.yj.schedule.domain.comment.CommentRequestDto;
 import com.yj.schedule.domain.schedule.ScheduleResponseDto;
-import com.yj.schedule.domain.comment.Comment;
 import com.yj.schedule.domain.schedule.Schedule;
 import com.yj.schedule.domain.user.User;
-import com.yj.schedule.domain.comment.CommentRepository;
 import com.yj.schedule.domain.schedule.ScheduleRepository;
 import com.yj.schedule.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.concurrent.RejectedExecutionException;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CommentService {
+public class CommentServiceImpl {
 
     private final CommentRepository commentRepository;
     private final ScheduleRepository scheduleRepository;

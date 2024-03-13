@@ -1,4 +1,4 @@
-package com.yj.schedule.dto;
+package com.yj.schedule.global;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,12 +10,10 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 public class CommonResponse<T> {
-    private Integer statusCode;
     private String msg;
     private T data;
 
-    public CommonResponse(Integer statusCode, String msg){
-        this.statusCode = statusCode;
+    public CommonResponse(String msg){
         this.msg = msg;
     }
 }

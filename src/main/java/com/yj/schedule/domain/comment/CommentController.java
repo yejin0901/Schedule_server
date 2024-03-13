@@ -1,13 +1,9 @@
-package com.yj.schedule.controller;
+package com.yj.schedule.domain.comment;
 
-import com.yj.schedule.dto.CommentRequestDto;
-import com.yj.schedule.dto.CommonResponse;
-import com.yj.schedule.dto.ScheduleResponseDto;
-import com.yj.schedule.security.UserDetailsImpl;
-import com.yj.schedule.service.CommentService;
-import jakarta.servlet.http.HttpServletRequest;
+import com.yj.schedule.global.CommonResponse;
+import com.yj.schedule.domain.schedule.ScheduleResponseDto;
+import com.yj.schedule.global.security.UserDetailsImpl;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class CommentController {
 
-    private final CommentService commentService;
+    private final CommentServiceImpl commentServiceImpl;
 
     @PostMapping("/schedules/{scheduleId}/comments")
     public ResponseEntity<CommonResponse<ScheduleResponseDto>> createComment(
@@ -28,10 +24,9 @@ public class CommentController {
             @RequestBody CommentRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
-        ScheduleResponseDto response =  commentService.createComment(requestDto, scheduleId, userDetails.getUser());
-            return ResponseEntity.ok()
+        ScheduleResponseDto response =  commentServiceImpl.createComment(requestDto, scheduleId, userDetails.getUser());
+            return ResponseEntity.status(HttpStatus.OK.value())
                     .body(CommonResponse.<ScheduleResponseDto>builder()
-                            .statusCode(HttpStatus.OK.value())
                             .msg("댓글이 생성되었습니다.")
                             .data(response)
                             .build());
@@ -44,18 +39,12 @@ public class CommentController {
             @RequestBody CommentRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
-        try{
-            ScheduleResponseDto response = commentService.updateComment(requestDto, scheduleId, commentId, userDetails.getUser());
-            return ResponseEntity.ok()
+            ScheduleResponseDto response = commentServiceImpl.updateComment(requestDto, scheduleId, commentId, userDetails.getUser());
+            return ResponseEntity.status(HttpStatus.OK.value())
                     .body(CommonResponse.<ScheduleResponseDto>builder()
-                            .statusCode(HttpStatus.BAD_REQUEST.value())
-                            .msg("작성자만 수정/삭제할 수 있습니다.")
+                            .msg("댓글이 수정되었습니다.")
                             .data(response)
                             .build());
-        } catch (Exception e){
-            return ResponseEntity.badRequest()
-                    .body(new CommonResponse<>(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
-        }
     }
 
     @DeleteMapping("/schedules/{scheduleId}/comments/{commentId}")
@@ -64,17 +53,11 @@ public class CommentController {
             @PathVariable Long commentId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
-        try{
-            ScheduleResponseDto response = commentService.deleteComment(scheduleId,commentId,userDetails.getUser());
-            return ResponseEntity.ok()
+            ScheduleResponseDto response = commentServiceImpl.deleteComment(scheduleId,commentId,userDetails.getUser());
+            return ResponseEntity.status(HttpStatus.OK.value())
                     .body(CommonResponse.<ScheduleResponseDto>builder()
-                            .statusCode(HttpStatus.BAD_REQUEST.value())
                             .msg("작성자만 수정/삭제할 수 있습니다.")
                             .data(response)
                             .build());
-        } catch (Exception e){
-            return ResponseEntity.badRequest()
-                .body(new CommonResponse<>(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
-        }
     }
 }

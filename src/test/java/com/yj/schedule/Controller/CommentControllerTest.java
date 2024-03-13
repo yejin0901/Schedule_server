@@ -1,15 +1,15 @@
 package com.yj.schedule.Controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yj.schedule.config.WebSecurityConfig;
-import com.yj.schedule.controller.CommentController;
-import com.yj.schedule.controller.ScheduleController;
-import com.yj.schedule.dto.CommentRequestDto;
-import com.yj.schedule.entity.User;
-import com.yj.schedule.entity.UserRoleEnum;
-import com.yj.schedule.security.UserDetailsImpl;
-import com.yj.schedule.service.CommentService;
-import com.yj.schedule.service.ScheduleService;
+import com.yj.schedule.global.config.WebSecurityConfig;
+import com.yj.schedule.domain.comment.CommentController;
+import com.yj.schedule.domain.schedule.ScheduleController;
+import com.yj.schedule.domain.comment.CommentRequestDto;
+import com.yj.schedule.domain.user.User;
+import com.yj.schedule.domain.user.UserRoleEnum;
+import com.yj.schedule.global.security.UserDetailsImpl;
+import com.yj.schedule.domain.comment.CommentServiceImpl;
+import com.yj.schedule.domain.schedule.ScheduleServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +41,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class CommentControllerTest {
 
     @MockBean
-    ScheduleService scheduleService;
+    ScheduleServiceImpl scheduleServiceImpl;
     @MockBean
-    CommentService commentService;
+    CommentServiceImpl commentServiceImpl;
     @Autowired
     private MockMvc mockMvc;
     @Autowired

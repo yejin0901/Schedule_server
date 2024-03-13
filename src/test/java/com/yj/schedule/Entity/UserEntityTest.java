@@ -1,7 +1,7 @@
 package com.yj.schedule.Entity;
 
-import com.yj.schedule.entity.User;
-import com.yj.schedule.entity.UserRoleEnum;
+import com.yj.schedule.domain.user.User;
+import com.yj.schedule.domain.user.UserRoleEnum;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

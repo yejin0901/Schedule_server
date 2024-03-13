@@ -1,11 +1,10 @@
-package com.yj.schedule.dto;
+package com.yj.schedule.domain.schedule;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.yj.schedule.entity.Comment;
-import com.yj.schedule.entity.Schedule;
-import com.yj.schedule.entity.User;
+import com.yj.schedule.domain.comment.CommentResponseDto;
+import com.yj.schedule.domain.comment.Comment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

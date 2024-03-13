@@ -1,19 +1,11 @@
-package com.yj.schedule.service;
+package com.yj.schedule.domain.user;
 
 
-import com.yj.schedule.dto.CommonResponse;
-import com.yj.schedule.dto.SignupRequestDto;
-import com.yj.schedule.entity.User;
-import com.yj.schedule.entity.UserRoleEnum;
-import com.yj.schedule.repository.UserRepository;
-import jakarta.validation.Valid;
+import com.yj.schedule.domain.login.SignupRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 

@@ -1,9 +1,9 @@
-package com.yj.schedule.config;
+package com.yj.schedule.global.config;
 
-import com.yj.schedule.jwt.JwtUtil;
-import com.yj.schedule.security.JwtAuthenticationFilter;
-import com.yj.schedule.security.JwtAuthorizationFilter;
-import com.yj.schedule.security.UserDetailsServiceImpl;
+import com.yj.schedule.global.jwt.JwtUtil;
+import com.yj.schedule.global.security.JwtAuthenticationFilter;
+import com.yj.schedule.global.security.JwtAuthorizationFilter;
+import com.yj.schedule.global.security.UserDetailsServiceImpl;
 import com.yj.schedule.domain.login.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;

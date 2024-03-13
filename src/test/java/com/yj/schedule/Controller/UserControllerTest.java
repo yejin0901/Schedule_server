@@ -1,12 +1,12 @@
 package com.yj.schedule.Controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yj.schedule.config.WebSecurityConfig;
-import com.yj.schedule.controller.UserController;
-import com.yj.schedule.dto.SignupRequestDto;
-import com.yj.schedule.jwt.JwtUtil;
-import com.yj.schedule.service.RefreshTokenService;
-import com.yj.schedule.service.UserService;
+import com.yj.schedule.global.config.WebSecurityConfig;
+import com.yj.schedule.domain.user.UserController;
+import com.yj.schedule.domain.login.SignupRequestDto;
+import com.yj.schedule.global.jwt.JwtUtil;
+import com.yj.schedule.domain.login.RefreshTokenService;
+import com.yj.schedule.domain.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

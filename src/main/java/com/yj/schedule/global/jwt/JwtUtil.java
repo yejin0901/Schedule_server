@@ -1,4 +1,4 @@
-package com.yj.schedule.jwt;
+package com.yj.schedule.global.jwt;
 
 import com.yj.schedule.global.CommonResponse;
 import com.yj.schedule.domain.user.UserRoleEnum;
@@ -48,7 +48,7 @@ public class JwtUtil {
                 Jwts.builder()
                         .setSubject(username) // 사용자 식별자값(ID)
                         .claim(AUTHORIZATION_KEY, role) // 사용자 권한
-                        .setExpiration(new Date(date.getTime() + TOKEN_TIME)) // 만료 시간
+//                        .setExpiration(new Date(date.getTime() + TOKEN_TIME)) // 만료 시간
                         .setIssuedAt(date) // 발급일
                         .signWith(key, signatureAlgorithm) // 암호화 알고리즘
                         .compact();
@@ -82,22 +82,19 @@ public class JwtUtil {
 
         } catch (SecurityException | MalformedJwtException | SignatureException e) {
             log.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
-            return ResponseEntity.ok()
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST.value())
                     .body(CommonResponse.builder()
-                            .statusCode(HttpStatus.BAD_REQUEST.value())
                             .msg("토큰이 유효하지 않습니다.")
                             .build());
         } catch (ExpiredJwtException e) {
             log.error("Expired JWT token, 만료된 JWT token 입니다.");
-            return ResponseEntity.ok()
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST.value())
                     .body(CommonResponse.builder()
-                            .statusCode(HttpStatus.BAD_REQUEST.value())
                             .msg("토큰이 유효하지 않습니다.")
                             .build());
         }
-        return ResponseEntity.ok()
+        return ResponseEntity.status(HttpStatus.OK.value())
                 .body(CommonResponse.builder()
-                        .statusCode(HttpStatus.BAD_REQUEST.value())
                         .msg("토큰이 유효합니다.")
                         .build());
     }

@@ -1,4 +1,4 @@
-package com.yj.schedule.entity;
+package com.yj.schedule.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;

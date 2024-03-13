@@ -1,4 +1,4 @@
-package com.yj.schedule.security;
+package com.yj.schedule.global.security;
 
 import com.yj.schedule.domain.user.User;
 import com.yj.schedule.domain.user.UserRepository;

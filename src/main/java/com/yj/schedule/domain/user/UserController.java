@@ -1,22 +1,18 @@
-package com.yj.schedule.controller;
+package com.yj.schedule.domain.user;
 
 
-import com.yj.schedule.dto.CommonResponse;
-import com.yj.schedule.dto.ScheduleResponseDto;
-import com.yj.schedule.dto.SignupRequestDto;
-import com.yj.schedule.jwt.JwtUtil;
-import com.yj.schedule.security.UserDetailsImpl;
-import com.yj.schedule.service.RefreshTokenService;
-import com.yj.schedule.service.UserService;
+import com.yj.schedule.domain.login.SignupRequestDto;
+import com.yj.schedule.global.CommonResponse;
+import com.yj.schedule.global.jwt.JwtUtil;
+import com.yj.schedule.global.security.UserDetailsImpl;
+import com.yj.schedule.domain.login.RefreshTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Objects;
 
-import static com.yj.schedule.jwt.JwtUtil.AUTHORIZATION_HEADER;
+import static com.yj.schedule.global.jwt.JwtUtil.AUTHORIZATION_HEADER;
 
 
 @Slf4j
@@ -46,15 +42,13 @@ public class UserController {
             }
         }
         if (!userService.signup(requestDto)) {
-                return ResponseEntity.ok()
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST.value())
                         .body(CommonResponse.builder()
-                                .statusCode(HttpStatus.BAD_REQUEST.value())
                                 .msg("중복된 username 입니다.")
                                 .build());
         }
-        return ResponseEntity.ok()
+        return ResponseEntity.status(HttpStatus.OK.value())
                 .body(CommonResponse.builder()
-                        .statusCode(HttpStatus.OK.value())
                         .msg("회원가입이 완료되었습니다.")
                         .build());
     }

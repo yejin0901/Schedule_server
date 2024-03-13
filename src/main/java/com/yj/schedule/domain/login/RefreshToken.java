@@ -1,9 +1,12 @@
-package com.yj.schedule.entity;
+package com.yj.schedule.domain.login;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Getter
+@NoArgsConstructor
 public class RefreshToken {
 
     @Id
@@ -21,6 +24,7 @@ public class RefreshToken {
         this.memberId = memberId;
         this.token = token;
     }
+
 
     public void validateSameToken(String refreshToken) {
         if (!this.token.equals(refreshToken)) {

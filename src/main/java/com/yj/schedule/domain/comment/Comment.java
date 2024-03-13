@@ -1,12 +1,12 @@
-package com.yj.schedule.entity;
+package com.yj.schedule.domain.comment;
 
 
-import com.yj.schedule.dto.CommentRequestDto;
+import com.yj.schedule.domain.schedule.Schedule;
+import com.yj.schedule.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Getter
@@ -24,7 +24,7 @@ public class Comment {
     @Column(nullable = false, length = 200)
     private String creator;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 

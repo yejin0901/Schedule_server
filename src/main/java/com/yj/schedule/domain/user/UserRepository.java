@@ -1,6 +1,6 @@
-package com.yj.schedule.repository;
+package com.yj.schedule.domain.user;
 
-import com.yj.schedule.entity.User;
+import com.yj.schedule.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

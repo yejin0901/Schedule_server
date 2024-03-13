@@ -1,11 +1,11 @@
 package com.yj.schedule.Security;
 
-import com.yj.schedule.entity.User;
-import com.yj.schedule.entity.UserRoleEnum;
-import com.yj.schedule.jwt.JwtUtil;
-import com.yj.schedule.security.JwtAuthenticationFilter;
-import com.yj.schedule.security.UserDetailsImpl;
-import com.yj.schedule.service.RefreshTokenService;
+import com.yj.schedule.domain.user.User;
+import com.yj.schedule.domain.user.UserRoleEnum;
+import com.yj.schedule.global.jwt.JwtUtil;
+import com.yj.schedule.global.security.JwtAuthenticationFilter;
+import com.yj.schedule.global.security.UserDetailsImpl;
+import com.yj.schedule.domain.login.RefreshTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ReadListener;
 import jakarta.servlet.ServletException;

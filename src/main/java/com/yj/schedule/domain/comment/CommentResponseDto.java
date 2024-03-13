@@ -1,6 +1,5 @@
-package com.yj.schedule.dto;
+package com.yj.schedule.domain.comment;
 
-import com.yj.schedule.entity.Comment;
 import lombok.Getter;
 
 @Getter

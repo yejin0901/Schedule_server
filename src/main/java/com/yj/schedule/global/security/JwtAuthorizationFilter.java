@@ -1,6 +1,6 @@
-package com.yj.schedule.security;
+package com.yj.schedule.global.security;
 
-import com.yj.schedule.jwt.JwtUtil;
+import com.yj.schedule.global.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

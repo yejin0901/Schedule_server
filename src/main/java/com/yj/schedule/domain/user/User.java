@@ -1,4 +1,4 @@
-package com.yj.schedule.entity;
+package com.yj.schedule.domain.user;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -6,8 +6,6 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.xml.transform.Source;
 
 @Entity
 @Getter

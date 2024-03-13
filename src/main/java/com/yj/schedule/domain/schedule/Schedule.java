@@ -1,6 +1,8 @@
-package com.yj.schedule.entity;
+package com.yj.schedule.domain.schedule;
 
-import com.yj.schedule.dto.ScheduleRequestDto;
+import com.yj.schedule.domain.comment.Comment;
+import com.yj.schedule.domain.Timestamped;
+import com.yj.schedule.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,7 +33,11 @@ public class Schedule extends Timestamped {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "schedule")
+    @OneToMany(
+            mappedBy = "schedule", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private List<Comment> commentList = new ArrayList<>();
 
     public Schedule(ScheduleRequestDto requestDto, User user){

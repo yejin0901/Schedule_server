@@ -1,11 +1,8 @@
-package com.yj.schedule.repository;
+package com.yj.schedule.domain.schedule;
 
-import com.yj.schedule.dto.ScheduleResponseDto;
-import com.yj.schedule.entity.Schedule;
-import com.yj.schedule.entity.User;
+import com.yj.schedule.domain.schedule.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {

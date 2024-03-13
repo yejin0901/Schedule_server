@@ -1,4 +1,4 @@
-package com.yj.schedule.dto;
+package com.yj.schedule.domain.login;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

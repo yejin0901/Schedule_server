@@ -1,4 +1,4 @@
-package com.yj.schedule.dto;
+package com.yj.schedule.domain.schedule;
 
 import lombok.Getter;
 import lombok.Setter;
