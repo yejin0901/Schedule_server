@@ -1,15 +1,15 @@
 package com.yj.schedule.Service;
 
-import com.yj.schedule.dto.CommentRequestDto;
-import com.yj.schedule.dto.ScheduleRequestDto;
-import com.yj.schedule.dto.ScheduleResponseDto;
-import com.yj.schedule.entity.Comment;
-import com.yj.schedule.entity.Schedule;
-import com.yj.schedule.entity.User;
-import com.yj.schedule.entity.UserRoleEnum;
-import com.yj.schedule.repository.CommentRepository;
-import com.yj.schedule.repository.ScheduleRepository;
-import com.yj.schedule.service.CommentService;
+import com.yj.schedule.domain.comment.CommentRequestDto;
+import com.yj.schedule.domain.schedule.ScheduleRequestDto;
+import com.yj.schedule.domain.schedule.ScheduleResponseDto;
+import com.yj.schedule.domain.comment.Comment;
+import com.yj.schedule.domain.schedule.Schedule;
+import com.yj.schedule.domain.user.User;
+import com.yj.schedule.domain.user.UserRoleEnum;
+import com.yj.schedule.domain.comment.CommentRepository;
+import com.yj.schedule.domain.schedule.ScheduleRepository;
+import com.yj.schedule.domain.comment.CommentServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,7 +31,7 @@ public class CommentServiceTest {
     @Mock
     private ScheduleRepository scheduleRepository;
     @InjectMocks
-    private CommentService commentService;
+    private CommentServiceImpl commentServiceImpl;
     private Schedule testSchedule;
     private User user;
 
@@ -53,7 +53,7 @@ public class CommentServiceTest {
         given(scheduleRepository.findById(scheduleId)).willReturn(Optional.of(testSchedule));
 
         // When
-        ScheduleResponseDto responseDto = commentService.createComment(requestDto, scheduleId, user);
+        ScheduleResponseDto responseDto = commentServiceImpl.createComment(requestDto, scheduleId, user);
 
         // Then
         assertNotNull(responseDto);
@@ -74,7 +74,7 @@ public class CommentServiceTest {
         given(commentRepository.findById(commentId)).willReturn(Optional.of(existComment));
 
         // When
-        ScheduleResponseDto responseDto = commentService.updateComment(requestDto, scheduleId, commentId, user);
+        ScheduleResponseDto responseDto = commentServiceImpl.updateComment(requestDto, scheduleId, commentId, user);
 
         // Then
         assertNotNull(responseDto);
@@ -94,7 +94,7 @@ public class CommentServiceTest {
         given(commentRepository.findById(commentId)).willReturn(Optional.of(comment));
 
         // When
-        ScheduleResponseDto responseDto = commentService.deleteComment(scheduleId, commentId, user);
+        ScheduleResponseDto responseDto = commentServiceImpl.deleteComment(scheduleId, commentId, user);
 
         // Then
         assertNotNull(responseDto);

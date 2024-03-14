@@ -1,10 +1,10 @@
 package com.yj.schedule.Entity;
 
-import com.yj.schedule.dto.CommentRequestDto;
-import com.yj.schedule.dto.ScheduleRequestDto;
-import com.yj.schedule.entity.Comment;
-import com.yj.schedule.entity.Schedule;
-import com.yj.schedule.entity.User;
+import com.yj.schedule.domain.comment.CommentRequestDto;
+import com.yj.schedule.domain.schedule.ScheduleRequestDto;
+import com.yj.schedule.domain.comment.Comment;
+import com.yj.schedule.domain.schedule.Schedule;
+import com.yj.schedule.domain.user.User;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
