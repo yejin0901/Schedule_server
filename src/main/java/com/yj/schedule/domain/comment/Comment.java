@@ -21,7 +21,7 @@ public class Comment {
     @Column(nullable = false, length = 500)
     private String comments;
 
-    @Column(nullable = false, length = 200)
+    @Column(nullable = false, length = 100)
     private String creator;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

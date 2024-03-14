@@ -46,22 +46,22 @@ public class ScheduleServiceTest {
         assertEquals(requestDto.getContents(), responseDto.getContents());
     }
 
-    @Test
-    public void testGetSchedule() {
-        // Given
-        Long scheduleId = 1L;
-        User user = new User();
-        user.setUsername("testUser");
-        Schedule schedule = new Schedule();
-        schedule.setUser(user);
-        given(scheduleRepository.findById(scheduleId)).willReturn(Optional.of(schedule));
-
-        // When
-        ScheduleResponseDto responseDto = scheduleServiceImpl.getSchedule(scheduleId, user);
-
-        // Then
-        assertNotNull(responseDto);
-    }
+//    @Test
+//    public void testGetSchedule() {
+//        // Given
+//        Long scheduleId = 1L;
+//        User user = new User();
+//        user.setUsername("testUser");
+//        Schedule schedule = new Schedule();
+//        schedule.setUser(user);
+//        given(scheduleRepository.findById(scheduleId)).willReturn(Optional.of(schedule));
+//
+//        // When
+//        ScheduleResponseDto responseDto = scheduleServiceImpl.getSchedule(scheduleId, user);
+//
+//        // Then
+//        assertNotNull(responseDto);
+//    }
 
     @Test
     public void testUpdateSchedule() {

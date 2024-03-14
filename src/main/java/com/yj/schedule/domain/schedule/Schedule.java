@@ -45,7 +45,6 @@ public class Schedule extends Timestamped {
         this.user = user;
         this.contents = requestDto.getContents();
         this.done = "FALSE";
-
     }
 
 

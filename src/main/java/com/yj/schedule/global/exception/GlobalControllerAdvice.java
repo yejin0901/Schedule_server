@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GlobalControllerAdvice {
-    @ExceptionHandler({NotFoundException.class})
-    public ResponseEntity<CommonResponse<?>> handleNotFoundException(IllegalArgumentException ex) {
+    @ExceptionHandler({NotFoundException.class, IllegalAccessException.class})
+    public ResponseEntity<CommonResponse<?>> handleException(IllegalArgumentException ex) {
         CommonResponse<?> Exception = new CommonResponse<>(ex.getMessage());
         return new ResponseEntity<>(
                 Exception,

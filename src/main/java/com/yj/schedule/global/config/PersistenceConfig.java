@@ -1,5 +1,6 @@
 package com.yj.schedule.global.config;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +13,7 @@ public class PersistenceConfig {
     private EntityManager entityManager;
 
     @Bean
-    public EntityManager entityManager() {
-        return entityManager;
+    public JPAQueryFactory jpaQueryFactory() {
+        return new JPAQueryFactory(entityManager);
     }
 }

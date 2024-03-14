@@ -56,7 +56,7 @@ public class CommentController {
             ScheduleResponseDto response = commentServiceImpl.deleteComment(scheduleId,commentId,userDetails.getUser());
             return ResponseEntity.status(HttpStatus.OK.value())
                     .body(CommonResponse.<ScheduleResponseDto>builder()
-                            .msg("작성자만 수정/삭제할 수 있습니다.")
+                            .msg("댓글이 삭제되었습니다.")
                             .data(response)
                             .build());
     }
