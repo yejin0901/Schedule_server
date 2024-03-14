@@ -14,7 +14,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ScheduleResponseDto{
-    private String id;
+    private Long id;
     private String title;
     private String contents;
     private String username;
@@ -31,5 +31,18 @@ public class ScheduleResponseDto{
         for (Comment comment : schedule.getCommentList()){
             commentList.add(new CommentResponseDto(comment));
         }
+    }
+
+    public ScheduleResponseDto(ScheduleProjection scheduleProjection) {
+        this.id = scheduleProjection.getId();
+        this.title = scheduleProjection.getTitle();
+        this.contents = scheduleProjection.getContents();
+    }
+
+    public ScheduleResponseDto(ScheduleProjection projection, List<CommentResponseDto> commentDtos) {
+        this.id = projection.getId();
+        this.title = projection.getTitle();
+        this.contents = projection.getContents();
+        commentList = commentDtos;
     }
 }

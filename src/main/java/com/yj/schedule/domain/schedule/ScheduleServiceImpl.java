@@ -61,6 +61,10 @@ public class ScheduleServiceImpl implements ScheduleService{
         return scheduleRepository.findSchedules(cond, pageDTO.toPageable());
     }
 
+    public List<ScheduleResponseDto> getProSchedule() {
+        return scheduleRepository.findScheduleProjections();
+    }
+
     private Boolean checkSelfUser(User user, Schedule schedule) {
         return user.getUsername().equals(schedule.getUser().getUsername());
     }

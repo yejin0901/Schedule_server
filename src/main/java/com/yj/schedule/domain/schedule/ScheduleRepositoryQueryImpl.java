@@ -1,9 +1,8 @@
 package com.yj.schedule.domain.schedule;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.yj.schedule.domain.comment.QComment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -17,7 +16,7 @@ import static com.yj.schedule.domain.schedule.QSchedule.schedule;
 
 
 @RequiredArgsConstructor
-public class ScheduleRepositoryQueryImpl implements ScheduleRepositoryQuery{
+public class ScheduleRepositoryQueryImpl implements ScheduleRepositoryQuery {
 
     private final JPAQueryFactory jpaQueryFactory;
 
@@ -39,6 +38,7 @@ public class ScheduleRepositoryQueryImpl implements ScheduleRepositoryQuery{
                 .orderBy(schedule.createdAt.desc())
                 .fetch();
 
+
         List<ScheduleResponseDto> scheduleResponseDtos = schedules.stream()
                 .map(ScheduleResponseDto::new)
                 .collect(Collectors.toList());
@@ -49,5 +49,19 @@ public class ScheduleRepositoryQueryImpl implements ScheduleRepositoryQuery{
                 .fetchCount();
 
         return new PageImpl<>(scheduleResponseDtos, pageable, total);
+    }
+
+    public List<ScheduleResponseDto> findScheduleProjections() {
+
+        List<ScheduleProjection> scheduleProjections = jpaQueryFactory
+                .select(Projections.constructor(ScheduleProjection.class,
+                        schedule.id,
+                        schedule.title,
+                        schedule.contents))
+                .from(schedule)
+                .orderBy(schedule.createdAt.desc())
+                .fetch();
+
+        return scheduleProjections.stream().map(ScheduleResponseDto::new).toList();
     }
 }
