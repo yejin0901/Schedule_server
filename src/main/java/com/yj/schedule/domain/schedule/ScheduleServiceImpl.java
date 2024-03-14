@@ -29,7 +29,7 @@ public class ScheduleServiceImpl implements ScheduleService{
     public Page<ScheduleResponseDto> getUserSchedule(User user) {
         PageDTO pageDTO = PageDTO.builder().currentPage(1).size((int) scheduleRepository.count()).build();
         ScheduleSearchCond cond = ScheduleSearchCond.builder().userId(user.getId()).build();
-        return scheduleRepository.getUserSchedule(cond,pageDTO.toPageable());
+        return scheduleRepository.findSchedules(cond,pageDTO.toPageable());
     }
 
     public Schedule findSchedule(Long id) {
@@ -54,9 +54,11 @@ public class ScheduleServiceImpl implements ScheduleService{
 
         return new ScheduleResponseDto(schedule);
     }
-    //query dsl 적용
-    public List<ScheduleResponseDto> getAllSchedule() {
-        return scheduleRepository.findAllByDoneEqualsOrderByCreatedAtDesc("FALSE").stream().map(ScheduleResponseDto::new).toList();
+
+    public Page<ScheduleResponseDto> getAllSchedule() {
+        PageDTO pageDTO = PageDTO.builder().currentPage(1).size((int) scheduleRepository.count()).build();
+        ScheduleSearchCond cond = ScheduleSearchCond.builder().IsDone("False").build();
+        return scheduleRepository.findSchedules(cond, pageDTO.toPageable());
     }
 
     private Boolean checkSelfUser(User user, Schedule schedule) {
