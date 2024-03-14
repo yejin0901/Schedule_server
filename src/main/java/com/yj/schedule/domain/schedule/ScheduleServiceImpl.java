@@ -1,10 +1,13 @@
 package com.yj.schedule.domain.schedule;
 
 
+import com.yj.schedule.domain.common.PageDTO;
 import com.yj.schedule.domain.user.User;
+import com.yj.schedule.global.exception.IllegalAccessException;
 import com.yj.schedule.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,25 +16,22 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ScheduleServiceImpl {
+@Transactional(readOnly = true)
+public class ScheduleServiceImpl implements ScheduleService{
 
     private final ScheduleRepository scheduleRepository;
-
+    @Transactional
     public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto, User user) {
         Schedule schedule = scheduleRepository.save(new Schedule(requestDto, user));
         return new ScheduleResponseDto(schedule);
     }
 
-    @Transactional
-    public ScheduleResponseDto getSchedule(Long id, User user) {
-        Schedule schedule = findSchedule(id);
-        if(!checkSelfUser(user,schedule)){
-            throw new NotFoundException("해당 사용자가 아닙니다.");
-        }
-        return new ScheduleResponseDto(schedule);
+    public Page<ScheduleResponseDto> getUserSchedule(User user) {
+        PageDTO pageDTO = PageDTO.builder().currentPage(1).size((int) scheduleRepository.count()).build();
+        ScheduleSearchCond cond = ScheduleSearchCond.builder().userId(user.getId()).build();
+        return scheduleRepository.getUserSchedule(cond,pageDTO.toPageable());
     }
 
-    @Transactional
     public Schedule findSchedule(Long id) {
         return scheduleRepository.findById(id).orElseThrow(() -> new NotFoundException("해당 할일이 존재하지 않습니다."));
     }
@@ -43,7 +43,7 @@ public class ScheduleServiceImpl {
         System.out.println("find : " + schedule.getId());
 
         if(!checkSelfUser(user,schedule)){
-            throw new NotFoundException("해당 사용자가 아닙니다.");
+            throw new IllegalAccessException("해당 사용자가 아닙니다.");
         }
         if (requestDto.getDone().equals("TRUE")) {
             schedule.setDone("TRUE");
@@ -51,19 +51,15 @@ public class ScheduleServiceImpl {
 
         schedule.setTitle(requestDto.getTitle());
         schedule.setContents(requestDto.getContents());
-        scheduleRepository.save(schedule);
-
-
 
         return new ScheduleResponseDto(schedule);
     }
-
+    //query dsl 적용
     public List<ScheduleResponseDto> getAllSchedule() {
         return scheduleRepository.findAllByDoneEqualsOrderByCreatedAtDesc("FALSE").stream().map(ScheduleResponseDto::new).toList();
     }
 
     private Boolean checkSelfUser(User user, Schedule schedule) {
-        log.info(schedule.getUser().getUsername());
         return user.getUsername().equals(schedule.getUser().getUsername());
     }
 }

@@ -5,6 +5,7 @@ import com.yj.schedule.domain.schedule.ScheduleResponseDto;
 import com.yj.schedule.domain.schedule.Schedule;
 import com.yj.schedule.domain.user.User;
 import com.yj.schedule.domain.schedule.ScheduleRepository;
+import com.yj.schedule.global.exception.IllegalAccessException;
 import com.yj.schedule.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,11 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CommentServiceImpl {
+@Transactional(readOnly = true)
+public class CommentServiceImpl implements CommentService{
 
     private final CommentRepository commentRepository;
     private final ScheduleRepository scheduleRepository;
 
+    @Transactional
     public ScheduleResponseDto createComment(CommentRequestDto requestDto, Long scheduleId, User user) {
         Schedule schedule = findSchedule(scheduleId);
         if(scheduleRepository.findById(scheduleId).isPresent()) {
@@ -36,7 +39,7 @@ public class CommentServiceImpl {
         Schedule schedule = findSchedule(scheduleId);
         Comment comment = findComment(commentId);
         if(!checkSelfUser(user, comment)){
-            throw new NotFoundException("해당 사용자가 아닙니다.");
+            throw new IllegalAccessException("해당 사용자가 아닙니다.");
         }
         comment.setComments(requestDto.getComments());
         commentRepository.save(comment);
@@ -48,7 +51,7 @@ public class CommentServiceImpl {
         Schedule schedule = findSchedule(scheduleId);
         Comment comment = findComment(commentId);
         if(!checkSelfUser(user, comment)){
-            throw new NotFoundException("해당 사용자가 아닙니다.");
+            throw new IllegalAccessException("해당 사용자가 아닙니다.");
         }
         commentRepository.delete(comment);
         return new ScheduleResponseDto(schedule);
