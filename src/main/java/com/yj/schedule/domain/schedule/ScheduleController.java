@@ -44,6 +44,16 @@ public class ScheduleController {
                         .build());
     }
 
+    @GetMapping("/pro-schedules")
+    public ResponseEntity<CommonResponse<List<ScheduleResponseDto>>> getProSchedule() {
+        List<ScheduleResponseDto> response = scheduleServiceImpl.getProSchedule();
+        return ResponseEntity.status(HttpStatus.OK.value())
+                .body(CommonResponse.<List<ScheduleResponseDto>>builder()
+                        .msg("선택 일정이 전체조회되었습니다.")
+                        .data(response)
+                        .build());
+    }
+
     @GetMapping("/schedules")
     public ResponseEntity<CommonResponse<List<ScheduleResponseDto>>> getUserSchedule(
             @AuthenticationPrincipal UserDetailsImpl userDetails
