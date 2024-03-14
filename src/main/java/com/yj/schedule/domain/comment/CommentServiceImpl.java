@@ -42,7 +42,6 @@ public class CommentServiceImpl implements CommentService{
             throw new IllegalAccessException("해당 사용자가 아닙니다.");
         }
         comment.setComments(requestDto.getComments());
-        commentRepository.save(comment);
         return new ScheduleResponseDto(schedule);
     }
 

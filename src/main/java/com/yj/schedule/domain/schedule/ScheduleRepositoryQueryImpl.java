@@ -1,5 +1,6 @@
 package com.yj.schedule.domain.schedule;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.yj.schedule.domain.comment.QComment;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.yj.schedule.domain.comment.QComment.comment;
 import static com.yj.schedule.domain.schedule.QSchedule.schedule;
@@ -19,25 +21,33 @@ public class ScheduleRepositoryQueryImpl implements ScheduleRepositoryQuery{
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public Page<ScheduleResponseDto> getUserSchedule(ScheduleSearchCond cond, Pageable pageable){
-        JPAQuery<Schedule> query = getScheduleQuery(cond)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize());
-        query.orderBy(schedule.createdAt.desc());
+    public Page<ScheduleResponseDto> findSchedules(ScheduleSearchCond cond, Pageable pageable) {
+        BooleanBuilder builder = new BooleanBuilder();
+        if (cond.getUserId() != null) {
+            builder.and(schedule.user.id.eq(cond.getUserId()));
+        }
+        if (cond.getIsDone() != null) {
+            builder.and(schedule.done.eq(cond.getIsDone())); // done 조건은 Boolean으로 처리, 조건에 따라 수정 필요
+        }
 
-        List<Schedule> schedules = query.fetch();
+        // 쿼리 생성 및 실행
+        List<Schedule> schedules = jpaQueryFactory.selectFrom(schedule)
+                .where(builder)
+                .leftJoin(schedule.commentList, comment).fetchJoin()
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(schedule.createdAt.desc())
+                .fetch();
 
         List<ScheduleResponseDto> scheduleResponseDtos = schedules.stream()
                 .map(ScheduleResponseDto::new)
-                .toList();
+                .collect(Collectors.toList());
 
-        return new PageImpl<>(scheduleResponseDtos);
-    }
+        // 전체 아이템 수 계산을 위한 쿼리 실행
+        long total = jpaQueryFactory.selectFrom(schedule)
+                .where(builder)
+                .fetchCount();
 
-    private JPAQuery<Schedule> getScheduleQuery(ScheduleSearchCond cond){
-        return jpaQueryFactory.selectFrom(schedule)
-                .leftJoin(schedule.commentList, comment).fetchJoin()
-                .where(schedule.user.id.eq(cond.getUserId()));
-
+        return new PageImpl<>(scheduleResponseDtos, pageable, total);
     }
 }

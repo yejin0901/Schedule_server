@@ -10,4 +10,6 @@ import lombok.*;
 @Builder
 public class ScheduleSearchCond {
     private Long userId;
+
+    private String IsDone;
 }

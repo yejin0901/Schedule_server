@@ -35,11 +35,12 @@ public class ScheduleController {
 
     @GetMapping("/all-schedules")
     public ResponseEntity<CommonResponse<List<ScheduleResponseDto>>> getAllSchedule() {
-        List<ScheduleResponseDto> response = scheduleServiceImpl.getAllSchedule();
+        Page<ScheduleResponseDto> response = scheduleServiceImpl.getAllSchedule();
+        List<ScheduleResponseDto> scheduleList = response.getContent();
         return ResponseEntity.status(HttpStatus.OK.value())
                 .body(CommonResponse.<List<ScheduleResponseDto>>builder()
-                        .msg("전체일정이 조회되었습니다.")
-                        .data(response)
+                        .msg("미완료된 일정이 전체조회되었습니다.")
+                        .data(scheduleList)
                         .build());
     }
 
