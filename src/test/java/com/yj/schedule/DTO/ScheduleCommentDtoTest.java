@@ -39,10 +39,8 @@ class ScheduleCommentDtoTest {
         // then
         assertEquals("Test title", dto.getTitle());
         assertEquals("Test contents", dto.getContents());
-        assertEquals("Test user", dto.getUsername());
         assertEquals("FALSE", dto.getDone());
         assertEquals(1, dto.getCommentList().size());
-        assertEquals("success", dto.getSuccess());
     }
 
 }

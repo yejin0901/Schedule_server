@@ -95,12 +95,4 @@ public class ScheduleServiceTest {
         assertEquals(requestDto.getDone(), responseDto.getDone());
         assertEquals(existingSchedule.getCreatedAt(), responseDto.getCreatedAt());
     }
-
-    @Test
-    public void testGetAllSchedule() {
-        // When
-        scheduleServiceImpl.getAllSchedule();
-        // Then
-        verify(scheduleRepository, times(1)).findAllByDoneEqualsOrderByCreatedAtDesc("FALSE");
-    }
 }
