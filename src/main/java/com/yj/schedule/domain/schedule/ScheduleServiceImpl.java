@@ -45,13 +45,11 @@ public class ScheduleServiceImpl implements ScheduleService{
         if(!checkSelfUser(user,schedule)){
             throw new IllegalAccessException("해당 사용자가 아닙니다.");
         }
-        if (requestDto.getDone().equals("TRUE")) {
+        if (requestDto.getDone()!=null && requestDto.getDone().equals("TRUE")) {
             schedule.setDone("TRUE");
         }
-
         schedule.setTitle(requestDto.getTitle());
         schedule.setContents(requestDto.getContents());
-
         return new ScheduleResponseDto(schedule);
     }
 
@@ -61,7 +59,7 @@ public class ScheduleServiceImpl implements ScheduleService{
         return scheduleRepository.findSchedules(cond, pageDTO.toPageable());
     }
 
-    public List<ScheduleResponseDto> getProSchedule() {
+    public List<ScheduleResponseDto> findScheduleProjections() {
         return scheduleRepository.findScheduleProjections();
     }
 

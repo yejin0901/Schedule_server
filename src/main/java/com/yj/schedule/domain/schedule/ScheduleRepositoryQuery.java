@@ -7,7 +7,5 @@ import java.util.List;
 
 public interface ScheduleRepositoryQuery {
     Page<ScheduleResponseDto> findSchedules(ScheduleSearchCond cond, Pageable pageable);
-
-
     List<ScheduleResponseDto> findScheduleProjections();
 }

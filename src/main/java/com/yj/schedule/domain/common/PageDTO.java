@@ -25,9 +25,4 @@ public class PageDTO {
             return PageRequest.of(currentPage - 1, size, Sort.by(sortBy).descending());
         }
     }
-
-    public Pageable toPageable(String sortBy) {
-        Sort sort = Sort.by(Sort.Order.desc(sortBy));
-        return PageRequest.of(currentPage - 1, size, sort);
-    }
 }

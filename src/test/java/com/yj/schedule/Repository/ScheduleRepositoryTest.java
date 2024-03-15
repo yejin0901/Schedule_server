@@ -3,6 +3,7 @@ package com.yj.schedule.Repository;
 
 import com.yj.schedule.domain.schedule.ScheduleRequestDto;
 import com.yj.schedule.domain.schedule.Schedule;
+import com.yj.schedule.domain.schedule.ScheduleResponseDto;
 import com.yj.schedule.domain.user.User;
 import com.yj.schedule.domain.user.UserRoleEnum;
 import com.yj.schedule.domain.schedule.ScheduleRepository;
@@ -42,19 +43,6 @@ class ScheduleRepositoryTest {
         schedule2.setUser(user);
 
         scheduleRepository.saveAll(List.of(schedule1, schedule2));
-    }
-
-    @Test
-    public void testFindAllByDoneEqualsOrderByCreatedAtDesc() {
-        // Given
-        String doneStatus = "FALSE";
-
-        // When
-        List<Schedule> schedules = scheduleRepository.findAllByDoneEqualsOrderByCreatedAtDesc(doneStatus);
-
-        // Then
-        assertEquals(1, schedules.size());
-        assertEquals("title 2", schedules.get(0).getTitle());
     }
 
 }

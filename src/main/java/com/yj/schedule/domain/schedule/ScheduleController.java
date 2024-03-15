@@ -35,22 +35,11 @@ public class ScheduleController {
 
     @GetMapping("/all-schedules")
     public ResponseEntity<CommonResponse<List<ScheduleResponseDto>>> getAllSchedule() {
-        Page<ScheduleResponseDto> response = scheduleServiceImpl.getAllSchedule();
-        List<ScheduleResponseDto> scheduleList = response.getContent();
+        List<ScheduleResponseDto> scheduleList = scheduleServiceImpl.findScheduleProjections();
         return ResponseEntity.status(HttpStatus.OK.value())
                 .body(CommonResponse.<List<ScheduleResponseDto>>builder()
                         .msg("미완료된 일정이 전체조회되었습니다.")
                         .data(scheduleList)
-                        .build());
-    }
-
-    @GetMapping("/pro-schedules")
-    public ResponseEntity<CommonResponse<List<ScheduleResponseDto>>> getProSchedule() {
-        List<ScheduleResponseDto> response = scheduleServiceImpl.getProSchedule();
-        return ResponseEntity.status(HttpStatus.OK.value())
-                .body(CommonResponse.<List<ScheduleResponseDto>>builder()
-                        .msg("선택 일정이 전체조회되었습니다.")
-                        .data(response)
                         .build());
     }
 
@@ -64,11 +53,11 @@ public class ScheduleController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(CommonResponse.<List<ScheduleResponseDto>>builder()
                         .msg("사용자 일정이 조회되었습니다.")
-                        .data(scheduleList) // List 객체를 data로 설정
+                        .data(scheduleList)
                         .build());
     }
 
-    @PutMapping("/schedules/{id}")
+    @PatchMapping("/schedules/{id}")
     public ResponseEntity<CommonResponse<ScheduleResponseDto>> updateSchedule(
             @PathVariable Long id,
             @RequestBody ScheduleRequestDto requestDto,
